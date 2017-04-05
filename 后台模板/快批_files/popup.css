@@ -1,0 +1,25 @@
+/*
+ *	Bootstrap jQuery Plugin - popup message
+ */
+.modal-open {
+  overflow: auto;
+  padding: 0 !important;
+}
+
+.modal.msg-popup {
+  top: auto;
+}
+
+.modal.msg-popup .modal-dialog {
+  width: 300px !important;
+  margin: 30px auto 60px;
+}
+
+.modal.msg-popup .modal-body {
+  background-color: #000;
+  color: #fff;
+}
+
+.modal.msg-popup .modal-content {
+  border: none;
+}

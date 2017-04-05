@@ -1,0 +1,730 @@
+/**
+ * 系统登录
+ * 
+ * @author Gin
+ * @date 2015-09-11
+ */
+
+/**
+ * 全局变量
+ */
+
+var isCookie = false;
+var isSendMess = false;
+var isForgetSendMess = false;
+
+$(function(){
+	$("#phone").val("");
+	$("#password").val("");
+	$("#captcha").val("");
+	$("#responseCaptcha").val("");
+	
+	// 自动登录
+	autoLogin();
+});
+
+/**
+ * 自动登录
+ */
+function autoLogin() {
+//	showProcessModal("正在初始化登录信息，请稍候...");
+//	hideProcessModal();
+	$.ajax({
+		url: "UserServlet?method=getCookie",
+		type: "post",
+		dataType: "json",
+		success: function(data, textStatus) {			
+			var phone = data['phone'];
+			var password = data['password'];
+			var isAuto = data['isAuto'];
+			var loginAccess = data['loginAccess'];
+			var captcha = "";
+			// 登录界面赋值
+			$('#phone').val(phone);
+			$('#password').val(password);
+
+			// 存在手机号码 Cookie
+			if (loginAccess) {
+				isCookie = true;
+				$("#divCaptcha").hide();
+				$("#loginbox").css("height", "370px");
+			} else {
+				isCookie = false;
+				$("#divCaptcha").show();
+				$("#loginbox").css("height", "430px");
+			}
+			
+			if (isAuto == 1) {
+				$('#autoLogin').attr("checked", true);
+				var userdata = {
+					"phone" : phone,
+					"password" : password,
+					"isAuto" : isAuto,
+					"captcha" : captcha
+				};
+				
+				doLogin(userdata);
+			} else {
+				$('#autoLogin').attr("checked", false);
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			hideProcessModal();
+//			showAlert("网络异常", "type-warning");
+			$.messager.popup("网络异常");
+		}
+	});
+}
+
+/**
+ * 打开忘记密码窗口
+ */
+function openForgetModal() {
+	var phone = $.trim($("#phone").val());
+	
+	$("#forgetPhone").val(phone);
+	$("#forgetPassword").val("");
+	$("#forgetCaptcha").val("");
+	$("#forgetModal").modal();
+	
+	loadMyEnterprise(phone);
+}
+
+/**
+ * 加载我的企业
+ */
+function loadMyEnterprise(phone) {
+	$.ajax({
+		url: "UserServlet?method=getMyEnterprise&Phone=" + phone,
+		type: "post",
+		dataType: "json",
+		success: function(data, textStatus) {
+			var error = data.error;
+			if (error) {
+//				showAlert(error, "type-warning");
+				$.messager.popup(error);
+				return;
+			}
+			
+			// 加载公司列表
+			var html = "<option value='selectShop'>请选择企业</option>";
+			$.each(data.Enterprise, function(i, item) {
+				html += "<option value='" + item.EnterpriseKID + "'>" + item.Name + "</option>";
+			});
+			$("#shop").html(html);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+//			showAlert("网络异常", "type-warning");
+			$.messager.popup("网络异常");
+		}
+	});
+}
+
+/**
+ * 忘记密码窗口 - 手机号码变化时更新企业列表信息
+ */
+function reloadMyEnterprise() {
+	var phone = $.trim($('#forgetPhone').val());
+	if (phone != "") {
+		loadMyEnterprise(phone);
+	}
+}
+
+/**
+ * 获取短信验证码
+ */
+function getCaptcha(isForget){
+	var phone = "";
+	var type = "1";
+	if (isForget == 1) {
+		phone = $.trim($('#forgetPhone').val());
+		type = "3";
+	} else {
+		phone = $.trim($('#phone').val());
+	}
+	
+	if (!phone.match(/^1[3,5,7,8]\d{9}$/)) {
+//		showAlert("手机号码格式不正确，请重新输入！");
+		$.messager.popup("手机号码格式不正确，请重新输入！");
+	} else {
+		// ---------- 发送按钮禁用60秒 「Begin」 ----------
+		var count = 60;
+		var progressTimer = "";
+		var captchaCaption = $("#btncaptcha").html();
+		var forgetCaptchaCaption = $("#forgetBtnCaptcha").html();
+		
+		$("#btncaptcha").attr("disabled", "disabled");
+		$("#forgetBtnCaptcha").attr("disabled", "disabled");
+		
+		progressTimer = setInterval(function() {
+			if (count <= 0) {
+				clearInterval(progressTimer);
+				
+				$("#btncaptcha").html(captchaCaption);
+				$("#btncaptcha").removeAttr("disabled", "disabled");
+				
+				$("#forgetBtnCaptcha").html(forgetCaptchaCaption);
+				$("#forgetBtnCaptcha").removeAttr("disabled", "disabled");
+				return;
+			}
+			
+			count--;
+			$("#btncaptcha").html(captchaCaption + "(" + count + ")");
+			$("#forgetBtnCaptcha").html(forgetCaptchaCaption + "(" + count + ")");
+		}, 1000);
+		// ---------- 发送按钮禁用60秒 「End」 ----------
+		
+		showProcessModal("正在发送短信验证码...");
+	    $.ajax({
+	    	url: "SMSManager?method=sendRandCode&phone=" + phone+"&type="+type, //发送请求地址
+	    	type: "post",
+	    	dataType: "json",
+	    	success:function(data,textStatus){
+	    		hideProcessModal();
+	 		    var error = data.error;
+	 		    var resultCode = data.resultCode;
+	 		    
+	 		    // 禁用发送按钮，-2：发送次数过多 -3：余额不足
+	 		    if (resultCode == -2 || resultCode == -3) {
+	 		    	clearInterval(progressTimer);
+	 		    	
+	 		    	$("#btncaptcha").attr("disabled", "disabled");
+	 		    	$("#btncaptcha").html(captchaCaption);
+	 		    	
+	 		    	$("#forgetBtnCaptcha").attr("disabled", "disabled");
+	 		    	$("#forgetBtnCaptcha").html(forgetCaptchaCaption);
+	 		    }
+	 		    
+	 		    if (error) {
+	 		    	$.messager.popup(error);
+	 		    	return;
+	 		    }
+	 		    
+				var randcode = data.randcode;
+				var success = data.success;
+				if (isForget == 1) {
+					isForgetSendMess = true;
+					isSendMess = true;
+				} else {
+					isSendMess = true;
+				}
+				
+	 		   $.messager.popup(success);
+	    	},
+	    	error:function(XMLHttpRequest, textStatus, errorThrown){
+	    		hideProcessModal();
+//	    		showAlert("网络异常", "type-warning");
+	    		$.messager.popup("网络异常");
+	 	   }
+	    });
+	}
+}
+
+/**
+ * 按钮倒计时
+ * @param btnIdName
+ * @param btnCaption
+ */
+function btnCountDown(interval, btnIdName, btnCaption) {
+	var count = interval;
+	var progressTimer = "";
+	$("#" + btnIdName).attr("disabled", "disabled");
+	
+	$("#" + btnIdName).html(btnCaption + "(" + count + ")");
+	progressTimer = setInterval(function() {
+		if (count <= 0) {
+			$("#" + btnIdName).html(btnCaption);
+			$("#" + btnIdName).removeAttr("disabled");
+			clearInterval(progressTimer);
+			return;
+		}
+		
+		count--;
+		$("#" + btnIdName).html(btnCaption + "(" + count + ")");
+	}, 1000);
+}
+
+function updateLogin() {
+	var enterpriseKID = $("#shop").val();
+	var phone = $.trim($('#forgetPhone').val());
+	var newPassword = $.trim($('#forgetPassword').val());
+	var forgetCaptcha = $.trim($('#forgetCaptcha').val()); // 用户输入的验证码
+
+	if (phone == "" || newPassword == "") {
+//		showAlert("手机和密码不能为空！");
+		$.messager.popup("手机和密码不能为空！");
+		return;
+	}
+	
+	if (!phone.match(/^1[3,5,7,8]\d{9}$/)) {
+//		showAlert("手机号码格式不正确，请重新输入！");
+		$.messager.popup("手机号码格式不正确，请重新输入！");
+		return;
+	}
+
+	var checkPassword = /^[0-9A-Za-z]{6,16}$/;
+	if (!checkPassword.test(newPassword)) {
+//		showAlert("密码格式错误！密码要求6位以上不含非法字符。");
+		$.messager.popup("密码格式错误！密码要求6位以上不含非法字符。");	
+		return;
+	}
+	
+	if (!isForgetSendMess) {
+//		showAlert("请点击获取验证码！");
+		$.messager.popup("请点击获取验证码！");
+		 $('#forgetBtnCaptcha').addClass('animated shake');
+		    setTimeout(function(){
+		        $('#forgetBtnCaptcha').removeClass('shake');
+		    }, 1000);
+		return;
+	}
+	if ($("#shop").val() == "selectShop") {
+		showAlert("请选择企业！");
+		$.messager.popup("请选择企业！");
+		return;
+	}
+	
+//	if (forgetCaptcha != responseCaptcha) {
+////		showAlert("验证码输入有误，请重新输入！");
+//		$.messager.popup("验证码输入有误，请重新输入！");
+//		 $('#forgetCaptcha').addClass('animated shake');
+//		    setTimeout(function(){
+//		        $('#forgetCaptcha').removeClass('shake');
+//		    }, 1000);
+//		return;
+//	}
+	$.ajax({
+    	url: "../../SMSManager?method=checkRandCode&phone=" + phone+"&randCode="+forgetCaptcha, //发送请求地址
+    	type: "post",
+    	dataType: "json",
+    	success:function(data,textStatus){
+    		hideProcessModal();
+ 		    var error = data.error;
+ 		    var result = data.result;
+		    if(result == 0){
+		    	var data = {
+		    			"Phone": phone,
+		    			"PWD": newPassword,
+		    			"EnterpriseKID": enterpriseKID
+		    		};
+		    	// 修改密码并登录
+		    	updatePWD(data);
+		    	return;
+		    } 
+ 		    if (error) {
+ 		    	$.messager.popup(error);
+ 		    	return;
+ 		    }
+    	},
+    	error:function(XMLHttpRequest, textStatus, errorThrown){
+    		hideProcessModal();
+    		$.messager.popup("网络异常");
+ 	   }
+    });
+	
+	
+	
+}
+
+function updatePWD(data) {
+	showProcessModal("正在修改密码...");
+	var parameter = JSON.stringify(data);
+	
+	$.ajax({
+		url: "UserServlet?method=updatePWD",
+		type: "post",
+		processData: false,
+		contentType: 'application/json',
+		data: parameter,
+		dataType : "text",
+		success : function(data, textStatus) {
+			hideProcessModal();
+			$.messager.popup(data);
+			
+			// 关闭忘记密码对话框
+			$("#forgetModal").modal("hide");
+			
+			var isCheck = $('#autoLogin').is(':checked');
+			var isAuto = isCheck ? 1 : 0;
+			var phone = $.trim($('#forgetPhone').val());
+			var newPassword = $.trim($('#forgetPassword').val());
+			
+			var userData = {
+				"phone" : phone,
+				"password" : newPassword,
+				"isAuto" : isAuto,
+				"isQQLogin" : 0
+			};
+			
+			//doLogin(userData);
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			hideProcessModal();
+//			showAlert("网络异常", "type-warning");
+			$.messager.popup("网络异常");
+		}
+	});
+}
+
+function doLogin(data) {
+	showProcessModal("正在登录系统...");
+	$.ajax({
+    	url: "UserServlet?method=doLogin",//发送请求地址
+    	type: "post",
+    	processData : false,
+    	contentType : 'application/json',
+    	data:JSON.stringify(data),
+    	dataType:"json",
+    	success:function(data, textStatus) {
+    		var error = data.error;
+    		var errorCode = data.errorCode;
+		    if(errorCode != 0){		 
+		    	hideProcessModal();
+		    	$.messager.popup(error);
+		    	if(errorCode == 3){
+		    		$("#divCaptcha").show();
+		    		$("#loginbox").css("height", "430px");
+		    		isCookie = false;
+		    	}
+		    	return;
+		    }		
+		    // 登录用户名（老板名）
+		    //$("#paramUserName").val(data.name);
+		    
+		    var dataEnterprise = [];
+		    if(data.enterprise.length > 1) {
+		        // 解析数组
+		        $.each(data.enterprise, function(i, item) {
+		        	dataEnterprise.push({"id": item.enterpriseKID , "text": item.enterpriseName,"image": item.enterpriseImageKID,"username": item.userName}); 
+		        });
+
+		        $('#paramEnterpriseKID').val(dataEnterprise[0].id);
+		        $('#paramEnterpriseName').val(dataEnterprise[0].text);
+		        $("#paramUserName").val(dataEnterprise[0].username);
+		        $('#paramEnterpriseImagesKID').val(dataEnterprise[0].image);	
+				$("#paramMultiEnterprise").val(JSON.stringify(data.enterprise));
+				loadSysSettings(dataEnterprise[0].id);
+		    }
+		    else{
+		        $.each(data.enterprise, function(i, item) {
+		        	$('#paramEnterpriseKID').val(item.enterpriseKID);
+		        	$('#paramEnterpriseName').val(item.enterpriseName);
+		        	  $("#paramUserName").val(item.userName);
+		        	$('#paramEnterpriseImagesKID').val(item.enterpriseImageKID);		   
+		        });
+		        
+		        $("#paramMultiEnterprise").val("");
+		        loadSysSettings($('#paramEnterpriseKID').val());
+		    }
+	   },
+	   error:function(XMLHttpRequest, textStatus, errorThrown) {
+		   hideProcessModal();
+//		   showAlert("网络异常", "type-warning");
+		   $.messager.popup("网络异常");
+	   }
+	});
+}
+
+function loadSysSettings(enterpriseKID) {
+	setProcessModalMessage("正在加载配置信息...");
+	$.ajax({
+		url: "UserServlet?method=getSysSettings&enterpriseKID=" + enterpriseKID,
+		type: "post",
+		dataType : "json",
+		success: function(data, textStatus) {
+			hideProcessModal();
+			var error = data.error;
+			if (error) {
+//				showAlert(error, "type-warning");
+				$.messager.popup(error);
+				return;
+			}
+
+			/*
+			 * 配置信息
+			 */
+			var i_Category_Show = "";
+			var i_Category_Title = "";
+			var i_Class_Show = "";
+			var i_Class_Title ="";
+			var i_Series_Show = "";
+			var i_Series_Title = "";
+			var i_Remark_Show = "";
+			var i_Remark_Title = "";
+//			新加三属性
+			var i_Num_Show = "";
+			var i_Num_Title = "";
+			var i_Location_Show = "";
+			var i_Location_Title ="";
+			var i_Brand_Show = "";
+			var i_Brand_Title = "";
+			
+			var i_PDA_Qty_Scale = "";
+			var i_PDA_Money_Scale = "";
+			
+			var i_PDA_Enable_Multi_Unit = ""; // 多单位
+			var i_PDA_Enable_2D_Table = ""; // 二维表
+			
+			var i_PDA_Goods_Retail_Show="";
+			var i_PDA_Goods_Retail_Title=""; //零售价
+			
+			var i_Dimension_One_Name="";//维度 1Grou 名称	
+			var i_Dimension_One_KID="";//维度1Grou  KID
+			var i_Dimension_Sec_Name="";//维度 2Grou 名称	
+			var i_Dimension_Sec_KID="";//维度2Grou  KID
+			var i_PDA_Storage = "0"; // 是否开启多仓，1为开启，否则为不开启
+			var i_SERVER_Storage = "0"; // 是否开启多仓，1为开启，否则为不开启,服务端
+			var defaultStoageKID = "";//默认仓库KID
+			
+			var i_IsOpen_Multi_Code="";//条码保存表判断  1，保存在条码表BaseGoodsBarCode ；0直接保存在商品表
+			
+			var i_PDA_Multi_Code="";//是否开启多条码
+			
+			var i_PDA_Goods_WholeSale_Title="";//批发价
+			
+			var i_PDA_Enable_Multi_Price ="";//多价格
+			
+			if (data.SysSettings.length > 0) {
+				// 解析数组
+				$.each(data.SysSettings, function(i, item) {
+					if (item.ItemName == "PDA_Goods_Category_Show") {
+						i_Category_Show = item.Value;
+					} else if (item.ItemName == "PDA_Goods_Category_Title") {
+						i_Category_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Class_Show") {
+						i_Class_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Class_Title") {
+						i_Class_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Series_Show") {
+						i_Series_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Series_Title") {
+						i_Series_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Remark_Show") {
+						i_Remark_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Remark_Title") {
+						i_Remark_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Num_Show") {
+						i_Num_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Num_Title") {
+						i_Num_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Location_Show") {
+						i_Location_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Location_Title") {
+						i_Location_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Brand_Show") {
+						i_Brand_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Brand_Title") {
+						i_Brand_Title = item.Value
+					} else if (item.ItemName == "PDA_Qty_Scale") {
+						i_PDA_Qty_Scale = item.Value
+					} else if (item.ItemName == "PDA_Money_Scale") {
+						i_PDA_Money_Scale = item.Value
+					} else if (item.ItemName == "PDA_Enable_Multi_Unit") {
+						i_PDA_Enable_Multi_Unit = item.Value;
+					} else if (item.ItemName == "PDA_Enable_2D_Table") {
+						i_PDA_Enable_2D_Table = item.Value;
+					} else if (item.ItemName == "PDA_Storage") {
+						i_PDA_Storage = item.Value;
+					} else if (item.ItemName == "isOpenStorage"){
+						i_SERVER_Storage = item.Value;
+					}else if (item.ItemName == "PDA_Goods_Retail_Title"){
+						i_PDA_Goods_Retail_Title=item.Value;
+					}else if (item.ItemName == "PDA_Goods_Retail_Show"){
+						i_PDA_Goods_Retail_Show=item.Value;
+					}else if(item.ItemName == "PDA_Multi_Code"){
+						i_PDA_Multi_Code=item.Value;
+					}else if(item.ItemName == "IsOpen_Multi_Code"){
+						i_IsOpen_Multi_Code=item.Value;
+					}else if(item.ItemName == "PDA_Goods_WholeSale_Title"){
+						i_PDA_Goods_WholeSale_Title=item.Value;
+					}else if(item.ItemName == "PDA_Enable_Multi_Price"){
+						i_PDA_Enable_Multi_Price=item.Value;
+					}
+				});
+				if(1 == i_PDA_Enable_2D_Table && data.Dimension.length > 0){
+					 i_Dimension_One_Name=data.Dimension[0].DimenName;
+					 i_Dimension_One_KID=data.Dimension[0].KID;
+					 i_Dimension_Sec_Name=data.Dimension[1].DimenName;
+					 i_Dimension_Sec_KID=data.Dimension[1].KID;
+
+				}
+				
+			}
+			
+//			if("1" == i_SERVER_Storage || 1 == i_SERVER_Storage){
+			if(data.Storage.length > 0){
+				defaultStoageKID = data.Storage[0].KID;
+			}
+//			}
+			
+			/*
+			 * 配置信息为空时设置默认值
+			 */
+			if (i_Category_Show == "") {
+				i_Category_Show = "1";
+			}
+			
+			if (i_Category_Title == "") {
+				i_Category_Title = "类别";
+			}
+			
+			if (i_Class_Show == "") {
+				i_Class_Show = "1";
+			}
+			
+			if (i_Class_Title == "") {
+				i_Class_Title = "单位";
+			}
+			
+			if (i_Series_Show == "") {
+				i_Series_Show = "1";
+			}
+
+			if (i_Series_Title == "") {
+				i_Series_Title = "规格";
+			}
+			
+			if (i_Remark_Show == "") {
+				i_Remark_Show = "1";
+			}
+			
+			if (i_Remark_Title == "") {
+				i_Remark_Title = "备注";
+			}
+//			新加三属性
+			if (i_Num_Show == "") {
+				i_Num_Show = "0";
+			}
+			if (i_Num_Title == "") {
+				i_Num_Title = "货号";
+			}
+			if (i_Location_Show == "") {
+				i_Location_Show = "0";
+			}
+			if (i_Location_Title == "") {
+				i_Location_Title = "货位";
+			}
+			if (i_Brand_Show == "") {
+				i_Brand_Show = "0";
+			}
+			if (i_Brand_Title == "") {
+				i_Brand_Title = "品牌";
+			}
+			
+			
+			if (i_PDA_Qty_Scale == "") {
+				i_PDA_Qty_Scale = "2";
+			}
+			
+			if (i_PDA_Money_Scale == "") {
+				i_PDA_Money_Scale = "2";
+			}
+			if(i_PDA_Enable_Multi_Unit==""){
+				i_PDA_Enable_Multi_Unit="0";
+			}
+			
+			var propert=[i_Category_Show,i_Category_Title,i_Class_Show,i_Class_Title,i_Series_Show,i_Series_Title,i_Remark_Show,i_Remark_Title
+			,i_Num_Show,i_Num_Title,i_Location_Show,i_Location_Title,i_Brand_Show,i_Brand_Title,i_PDA_Goods_Retail_Show
+			];
+			
+			var dimension=[i_Dimension_One_Name,i_Dimension_One_KID,i_Dimension_Sec_Name,i_Dimension_Sec_KID]
+			var enterpriseKID = $("#enterpriseKID").val();
+			var phone = $.trim($("#phone").val());
+			var pwd = $.trim($("#password").val());
+			
+			$("#paramProperty").val(propert);
+			$("#paramDimension").val(dimension);
+			$("#paramQtyScale").val(i_PDA_Qty_Scale);
+			$("#paramMoneyScale").val(i_PDA_Money_Scale);
+			$("#paramPhone").val($.trim($("#phone").val()));
+			$("#paramPassword").val($.trim($("#password").val()));
+			
+			$("#paramEnableMultiUnit").val(i_PDA_Enable_Multi_Unit);
+			$("#paramEnable2DTable").val(i_PDA_Enable_2D_Table);
+			$("#paramPDAStorage").val(i_PDA_Storage);
+			$("#paramSERVERStorage").val(i_SERVER_Storage);
+			$("#paramDefaultStorage").val(defaultStoageKID);
+			
+			$("#paramPDAGoodsRetailShow").val(i_PDA_Goods_Retail_Show);
+			$("#paramPDAGoodsRetailTitle").val(i_PDA_Goods_Retail_Title);
+			
+			$("#paramIsOpenMultiCode").val(i_IsOpen_Multi_Code);
+			$("#paramPDAMultiCode").val(i_PDA_Multi_Code);
+			
+			$("#paramPDAGoodsWholeSaleTitle").val(i_PDA_Goods_WholeSale_Title);
+			$("#paramPDAEnableMultiPrice").val(i_PDA_Enable_Multi_Price);
+			
+			$("#submitLogin").click();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			hideProcessModal();
+//			showAlert("网络异常", "type-warning");
+			$.messager.popup("网络异常");
+		}
+	});
+}
+
+function checkLogin() {
+	var phone = $.trim($("#phone").val());
+	var password = $.trim($("#password").val());
+	var isCheck = $("#autoLogin").is(":checked");
+	var isAuto = isCheck ? 1 : 0;
+	var captcha = $.trim($("#captcha").val()); // 用户输入的验证码
+	if (phone == "") {
+		$.messager.popup("手机不能为空！");
+		 $('#phone').addClass('animated shake');
+		    setTimeout(function(){
+		        $('#phone').removeClass('shake');
+		    }, 1000);
+		return;
+	}
+	if (password == "") {
+		$.messager.popup("密码不能为空！");
+		 $('#password').addClass('animated shake');
+		    setTimeout(function(){
+		        $('#password').removeClass('shake');
+		    }, 1000);
+		return;
+	}
+	
+	if (!phone.match(/^1[3,5,7,8]\d{9}$/)) {
+//		showAlert("手机号码格式不正确，请重新输入！");
+		$.messager.popup("手机号码格式不正确，请重新输入！");
+		 $('#phone').addClass('animated shake');
+		    setTimeout(function(){
+		        $('#phone').removeClass('shake');
+		    }, 1000);
+		return;
+	}
+	
+	var isHidden = $("#divCaptcha").is(":hidden"); // 是否隐藏
+	if (!isCookie && !isHidden && !isSendMess) {
+		$.messager.popup("请点击获取验证码！");
+		$('#btncaptcha').addClass('animated shake');
+		setTimeout(function() {
+			$('.btn-save').removeClass('shake');
+		}, 1000);
+		return;
+	}
+	
+	
+	if (!isHidden && !captcha.match(/^\d{6}$/)) {
+		$.messager.popup("验证码输入有误，请重新输入！");
+		 $('#captcha').addClass('animated shake');
+		    setTimeout(function(){
+		        $('#captcha').removeClass('shake');
+		    }, 1000);
+		return;
+	}
+	
+	var userData = {
+		"phone": phone,
+		"password": password,
+		"isAuto": isAuto,
+		"captcha": captcha
+	};
+	doLogin(userData);
+}
+
+
+

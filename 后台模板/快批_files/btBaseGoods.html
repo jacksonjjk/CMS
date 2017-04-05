@@ -1,0 +1,1246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0041)http://kp99.cn//biz/pages/btBaseGoods.jsp -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript">
+	var basePath = "http://kp99.cn:80/";
+</script>
+<title>存货列表</title>
+<style type="text/css">
+.box-1{position:absolute; width:20px; height:20px; left:15px; top:0px} 
+.box0{position:absolute; width:20px; height:40px; left:454px; top:35px} 
+.box1{position:absolute; width:20px; height:40px; left:489px; top:35px} 
+.box2{position:absolute; width:20px; height:40px; left:524px; top:35px}
+.box3{position:absolute; width:20px; height:40px; left:559px; top:35px}
+.box4{position:absolute; width:20px; height:40px; left:594px; top:35px}
+.box5{position:absolute; width:20px; height:40px; left:629px; top:40px} 
+
+</style>
+<!-- bootstrap -->
+<link rel="stylesheet" type="text/css" href="./bootstrap.css">
+
+<!-- bootstrap table -->
+<link rel="stylesheet" type="text/css" href="./bootstrap-table.css">
+
+<!-- bootstrap datetimepicker -->
+<link rel="stylesheet" type="text/css" href="./bootstrap-datetimepicker.css">
+
+<!-- font awesome -->
+<link rel="stylesheet" type="text/css" href="./font-awesome.css">
+
+<!-- Bootstrap jQuery Plugin - popup message -->
+<link rel="stylesheet" type="text/css" href="./popup.css">
+
+<!-- kp -->
+<link rel="stylesheet" type="text/css" href="./kp_style(1).css">
+</head>
+<body style="background: rgb(237, 239, 245);">
+
+<input id="Qty_Scale" type="hidden" value="3"> <!-- 价格精度 -->
+<input id="Money_Scale" type="hidden" value="3"> <!-- 价格精度 -->
+<input id="Enable_2D_Table" type="hidden" value="0"> <!-- 是否开启二维表 -->
+<input id="PDA_Storage" type="hidden" value="0"> <!-- 是否开多仓 -->
+<input id="SERVER_Storage" type="hidden" value="0"> <!-- 是否开多仓 服务端 -->
+<input id="defaultStorageKID" type="hidden" value=""> <!-- 默认仓库KID -->
+<input id="enterpriseKID" type="hidden" value="696d8fc2-8dd1-4c98-802f-5eedb2af4bf4"><!-- 企业KID -->
+<input id="i_PDA_Goods_Retail_Show" type="hidden" value=""><!--零售价显示  -->
+<input id="i_PDA_Goods_Class_Show" type="hidden" value="1"><!-- 单位显示 -->
+<input id="Enable_Multi_Unit" type="hidden" value="0"><!-- 是否开启多单位 -->
+<input id="i_IsOpen_Multi_Code" type="hidden" value=""><!-- 是否开启过多条码 -->
+<input id="i_PDA_Multi_Code" type="hidden" value=""><!-- 是否开启了多条码 -->
+<input id="i_PDA_Goods_WholeSale_Title" type="hidden" value=""><!-- 是否开启了多条码 -->
+<input id="i_PDA_Enable_Multi_Price" type="hidden" value="0"><!-- 是否开启多价格 -->
+
+
+<input id="setting-enterpriseImageKID" type="hidden" value="">
+<input id="setting-enterpriseName" type="hidden" value="富贵琥珀">
+<input id="setting-username" type="hidden" value="测试">
+<input id="setting-enterpriseKID" type="hidden" value="696d8fc2-8dd1-4c98-802f-5eedb2af4bf4">
+<div style="display: none" id="setting-MultiEnterprise"></div>
+<!-- jquery -->
+<script type="text/javascript" src="./jquery-1.10.2.js.下载"></script>
+<div id="content-top">
+ 	<div>
+		<button type="button" class="btn btn-link text" style="color: #323f4c" aria-label="Left Align" id="btnNavigation">
+			<span class="glyphicon glyphicon-chevron-left text" aria-hidden="true"></span>
+			隐藏导航栏
+		</button>
+	</div> 
+	<div class="container-fluid">
+		<div id="settings">
+			<button id="openChageShop" class="btn btn-link k dropdown-toggle" data-toggle="dropdown">
+				<img alt="" src="./noimage.jpg" onerror="this.src=&#39;../../images/noimage.jpg&#39;" width="23" height="23" class="img-circle"> 富贵琥珀
+				
+			</button>
+			<button class="btn btn-link"><span class="glyphicon glyphicon-user"></span> 测试</button>
+		<button onclick="logout();" type="button" class="btn btn-link"><i class="fa fa-power-off "></i> 注销</button>
+		 <ul class="dropdown-menu" id="setting-select-shop">
+	    </ul>
+		</div>
+	</div>
+</div>
+
+<!-- 切换店铺 Modal -->
+<!-- <div class="modal fade" id="setting-shop-modal">
+	<div class="modal-dialog" style="width: 300px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			   <h3 class="modal-title"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>切铺店铺</h3>
+			</div>
+			<div class="modal-body">
+				<table width="100%">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">店铺</span>
+								<select class="text-input form-control" id="setting-select-shop1"></select>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>modal body
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+            	<button type="button" class="btn btn-primary" onclick="changeShop();"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>确定</button>
+         	</div>modal footer
+		</div>modal content
+	</div>modal dialog
+</div>modal
+ -->
+<script type="text/javascript" src="./contenTop.js.下载"></script>
+
+
+<div id="content">
+	<div class="widget-box">
+		<div class="widget-content">
+			<!-- 自定义工具栏 Begin -->
+			<table>
+				<tbody><tr>
+					<td width="150px" id="storage" class="hidden">
+						<select class="text-input form-control" id="editStorage"></select>
+					</td>
+					<td width="150px" id="tagGoods">
+						<select class="text-input form-control" id="editTagGoods"><option value="selectTagGoods">所有标签</option><option value="C597504C-4CF8-4EA9-94DB-CB69DC814FE2">爆品 (0)</option><option value="43515FB3-8D78-4203-BED2-7A4119972FCE">新品 (0)</option><option value="26B026AF-7764-402D-87E0-F99470F943CB">清货 (0)</option><option value="42F934B3-6B57-4FF1-A2A4-66C7B8B8AD6A">不管库存 (0)</option></select>
+					</td>
+					<!-- 按钮 -->
+					<td class="goods-content-top">
+						<div class="btn-group" role="group">
+							<button id="btnAdd" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="新增" onclick="addGoods();" aria-label="Left Align">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新增
+							</button>
+							
+							<button id="btnDeletd" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="删除" onclick="deletedGoods();" aria-label="Left Align" disabled="disabled">
+								<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 删除
+							</button>
+						</div>
+					</td>
+							
+					<!--td width="180px">
+						<div class="input-group input-group-sm">
+							<input id="searchText" type="text" class="form-control" placeholder="请输入搜索条件..." onkeypress="enterPress(event)" onkeydown="enterPress()"  />
+							<span class="input-group-btn">
+								<button class="btn btn-primary" type="button" onClick="doSearch();" id="btnSearch">
+								  <span class="glyphicon glyphicon-search"></span>
+								</button>
+						  	</span>
+						</div>
+					</td-->
+					<td class="goods-content-top">
+						<div class="btn-group" role="group">	
+							<button id="btnImport" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="导入" onclick="openImport();" aria-label="Left Align">
+								<span class="glyphicon glyphicon-import" aria-hidden="true"></span> 导入
+							</button>
+							<button id="btnExport" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="导出" onclick="openExport();" aria-label="Left Align">
+								<span class="glyphicon glyphicon-export" aria-hidden="true"></span> 导出
+							</button>
+						</div>
+					</td>
+					
+						
+					<td><div class="spaceW5"></div></td>
+					
+					<!-- 开始日期 -->
+					
+					<!-- 内容搜索 -->
+					
+					<td width="60px">
+						<button type="button" class="btn btn-link btn-sm" data-toggle="tooltip" title="高级筛选" id="goodsFilter" aria-label="Left Align">
+							<i class="fa fa-filter"></i>&nbsp;开启筛选
+						</button>					
+					</td>
+					<td width="60px">
+						<button type="button" class="btn btn-link btn-sm" data-toggle="tooltip" aria-label="Left Align" onclick="downloadTemp();">
+							<a aria-label="Left Align"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 下载模版</a>
+						</button>
+					</td>
+				</tr>
+			</tbody></table>
+			<!-- 自定义工具栏 End -->
+			<div class="space5"></div>
+			<div class="bootstrap-table"><div class="fixed-table-toolbar"></div><div class="fixed-table-container" style="height: 605px; padding-bottom: 82px;"><div class="fixed-table-header" style="margin-right: 17px;"><table class="table table-hover" style="width: 1519px;"><thead><tr><th class="bs-checkbox " style="text-align: center; vertical-align: middle; width: 36px; " data-field="state"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell" style="width: 29px;"></div></th><th style="text-align: center; vertical-align: middle; width: 30px; " data-field="ImageKID"><div class="th-inner ">图片</div><div class="fht-cell" style="width: 56px;"></div></th><th style="text-align: center; vertical-align: middle; width: 80px; " data-field="Description"><div class="th-inner sortable both">名称</div><div class="fht-cell" style="width: 152px;"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="Category"><div class="th-inner sortable both">类别</div><div class="fht-cell" style="width: 59px;"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Series"><div class="th-inner sortable both">规格</div><div class="fht-cell" style="width: 86px;"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Class"><div class="th-inner sortable both">单位</div><div class="fht-cell" style="width: 59px;"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="Qty"><div class="th-inner sortable both">库存</div><div class="fht-cell" style="width: 72px;"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="CostPrice"><div class="th-inner sortable both">成本</div><div class="fht-cell" style="width: 59px;"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="SalePrice"><div class="th-inner sortable both">批发价</div><div class="fht-cell" style="width: 73px;"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="CostMoney"><div class="th-inner ">库存额</div><div class="fht-cell" style="width: 43px;"></div></th><th style="text-align: center; vertical-align: middle; width: 30px; " data-field="Creator"><div class="th-inner sortable both">创建人</div><div class="fht-cell" style="width: 73px;"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="CreateTime"><div class="th-inner sortable both">创建时间</div><div class="fht-cell" style="width: 130px;"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="EditTime"><div class="th-inner sortable both">修改时间</div><div class="fht-cell" style="width: 130px;"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="TagName"><div class="th-inner ">标签</div><div class="fht-cell" style="width: 166px;"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Barcode"><div class="th-inner ">条码</div><div class="fht-cell" style="width: 166px;"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Remark"><div class="th-inner ">备注</div><div class="fht-cell" style="width: 166px;"></div></th></tr><tr style="border: 1px solid #999;background=#fff;display:none" class="datascreening "><th><input type="text" value="" style="width: 29px" id="state"></th><th><input type="text" value="" style="width: 56px" id="ImageKID"></th><th><input type="text" value="" style="width: 152px" id="Description"></th><th><input type="text" value="" style="width: 59px" id="Category"></th><th><input type="text" value="" style="width: 86px" id="Series"></th><th><input type="text" value="" style="width: 59px" id="Class"></th><th><input type="text" value="" style="width: 72px" id="Qty"></th><th><input type="text" value="" style="width: 59px" id="CostPrice"></th><th><input type="text" value="" style="width: 73px" id="SalePrice"></th><th><input type="text" value="" style="width: 43px" id="CostMoney"></th><th><input type="text" value="" style="width: 73px" id="Creator"></th><th><input type="text" value="" style="width: 130px" id="CreateTime"></th><th><input type="text" value="" style="width: 130px" id="EditTime"></th><th><input type="text" value="" style="width: 166px" id="TagName"></th><th><input type="text" value="" style="width: 166px" id="Barcode"></th><th><input type="text" value="" style="width: 166px" id="Remark"></th></tr></thead></table></div><div class="fixed-table-body"><div class="fixed-table-loading" style="top: 41px; display: none;">正在努力地加载数据中，请稍候……</div><table id="bootstrapTable" class="table table-hover" data-id-field="KID" style="margin-top: -40px;">
+				<thead><tr><th class="bs-checkbox " style="text-align: center; vertical-align: middle; width: 36px; " data-field="state"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 30px; " data-field="ImageKID"><div class="th-inner ">图片</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 80px; " data-field="Description"><div class="th-inner sortable both">名称</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="Category"><div class="th-inner sortable both">类别</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Series"><div class="th-inner sortable both">规格</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Class"><div class="th-inner sortable both">单位</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="Qty"><div class="th-inner sortable both">库存</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="CostPrice"><div class="th-inner sortable both">成本</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="SalePrice"><div class="th-inner sortable both">批发价</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 40px; " data-field="CostMoney"><div class="th-inner ">库存额</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 30px; " data-field="Creator"><div class="th-inner sortable both">创建人</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="CreateTime"><div class="th-inner sortable both">创建时间</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="EditTime"><div class="th-inner sortable both">修改时间</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="TagName"><div class="th-inner ">标签</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Barcode"><div class="th-inner ">条码</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 60px; " data-field="Remark"><div class="th-inner ">备注</div><div class="fht-cell"></div></th></tr><tr style="border: 1px solid #999;background=#fff;display:none" class="datascreening "><th><input type="text" value="" style="width: 29px" id="state"></th><th><input type="text" value="" style="width: 56px" id="ImageKID"></th><th><input type="text" value="" style="width: 152px" id="Description"></th><th><input type="text" value="" style="width: 59px" id="Category"></th><th><input type="text" value="" style="width: 86px" id="Series"></th><th><input type="text" value="" style="width: 59px" id="Class"></th><th><input type="text" value="" style="width: 72px" id="Qty"></th><th><input type="text" value="" style="width: 59px" id="CostPrice"></th><th><input type="text" value="" style="width: 73px" id="SalePrice"></th><th><input type="text" value="" style="width: 43px" id="CostMoney"></th><th><input type="text" value="" style="width: 73px" id="Creator"></th><th><input type="text" value="" style="width: 130px" id="CreateTime"></th><th><input type="text" value="" style="width: 130px" id="EditTime"></th><th><input type="text" value="" style="width: 166px" id="TagName"></th><th><input type="text" value="" style="width: 166px" id="Barcode"></th><th><input type="text" value="" style="width: 166px" id="Remark"></th></tr></thead>
+			<tbody><tr data-index="0"><td class="bs-checkbox"><input data-index="0" name="btSelectItem" type="checkbox" value="137ab71d-6496-4458-93d8-889aa36dee7a"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;cc900731-5a86-423f-82ed-638db22b0e91&quot;, &quot;137ab71d-6496-4458-93d8-889aa36dee7a&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">新密戒面</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">白蜜</td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">2,383.9</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-17 14:57</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 19:03</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="1"><td class="bs-checkbox"><input data-index="1" name="btSelectItem" type="checkbox" value="c9bbe711-7bbe-4181-bdef-c1f9f6cb803a"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;21119ad4-5386-456b-8cce-1139ff9a93ef&quot;, &quot;c9bbe711-7bbe-4181-bdef-c1f9f6cb803a&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(1)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">项链</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">杂货</td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">250.1</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-19 19:17</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 17:05</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="2"><td class="bs-checkbox"><input data-index="2" name="btSelectItem" type="checkbox" value="fc31b70b-16a8-4c3a-b931-bc6a4e174df1"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;2cc605af-01d8-43ca-b7e9-cb33396aa20d&quot;, &quot;fc31b70b-16a8-4c3a-b931-bc6a4e174df1&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(2)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">多宝圆珠手串/长链</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">330.4</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 16:24</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 16:24</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="3"><td class="bs-checkbox"><input data-index="3" name="btSelectItem" type="checkbox" value="f774f1ce-729c-4576-844d-a157ee37c345"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;09e6ad42-faff-4ae4-afb6-c8e1142ec22f&quot;, &quot;f774f1ce-729c-4576-844d-a157ee37c345&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(3)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">血珀桶珠/米珠手串</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">246.2</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-19 10:17</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 16:20</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="4"><td class="bs-checkbox"><input data-index="4" name="btSelectItem" type="checkbox" value="4f45376c-05ec-4d46-9b24-03f6e22132f7"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;8b957357-31a5-4c0f-ae11-2261e52ea47e&quot;, &quot;4f45376c-05ec-4d46-9b24-03f6e22132f7&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(4)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">白/老蜡桶珠16寸/配链</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">975.8</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-19 15:16</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 15:57</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="5"><td class="bs-checkbox"><input data-index="5" name="btSelectItem" type="checkbox" value="8fb41bdf-df30-44c4-a0df-47b02c4e67d7"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;580cf356-0689-42be-802a-2df01d2a8257&quot;, &quot;8fb41bdf-df30-44c4-a0df-47b02c4e67d7&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(5)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">新蜜桶珠配链/16寸</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">240.8</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-19 19:32</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 15:54</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="6"><td class="bs-checkbox"><input data-index="6" name="btSelectItem" type="checkbox" value="50137704-f87c-4409-a29e-0589c30711bb"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;657ba360-e665-4bfd-8541-106a8397b498&quot;, &quot;50137704-f87c-4409-a29e-0589c30711bb&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(6)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">琥珀原石（大）</td><td style="text-align: center; vertical-align: middle; width: 40px; ">琥珀</td><td style="text-align: center; vertical-align: middle; width: 60px; ">大原石</td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">1,549.7</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">店1号</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-02-29 10:24</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 14:18</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="7"><td class="bs-checkbox"><input data-index="7" name="btSelectItem" type="checkbox" value="399e92ea-085d-4eec-b158-56d2e727ac2b"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;c7cbe8b7-9cdd-4572-b363-fdd6ec8cf0e9&quot;, &quot;399e92ea-085d-4eec-b158-56d2e727ac2b&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(7)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">小原石</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">10-20/5-10</td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">2,596.48</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-17 12:43</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 14:15</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="8"><td class="bs-checkbox"><input data-index="8" name="btSelectItem" type="checkbox" value="77e4bfc3-151d-42c4-a57d-3b241dbcbef1"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;08d421ef-d8c7-4cd2-b447-bcb9fb056eaa&quot;, &quot;77e4bfc3-151d-42c4-a57d-3b241dbcbef1&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(8)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">老蜡扁珠16寸</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">老蜡</td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">1,648.2</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-19 15:14</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 12:26</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr><tr data-index="9"><td class="bs-checkbox"><input data-index="9" name="btSelectItem" type="checkbox" value="902d4b48-ddcf-4ed7-9f0c-748620bb7424"></td><td style="text-align: center; vertical-align: middle; width: 30px; "><a href="javascript:showLagerImage(&quot;0a555d3c-90cd-43bc-8e86-1b4f3bc4dbfa&quot;, &quot;902d4b48-ddcf-4ed7-9f0c-748620bb7424&quot;)" title="点击查看大图"><img width="40" height="50" src="./downImage(9)" onerror="this.src=&#39;../../images/noimage.jpg&#39;"></a></td><td style="text-align: center; vertical-align: middle; width: 80px; ">白蜜扁珠16寸</td><td style="text-align: center; vertical-align: middle; width: 40px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; "></td><td style="text-align: center; vertical-align: middle; width: 60px; ">g</td><td style="text-align: center; vertical-align: middle; width: 40px; ">489.5</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 40px; ">0</td><td style="text-align: center; vertical-align: middle; width: 30px; ">陈先生</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 12:13</td><td style="text-align: center; vertical-align: middle; width: 60px; ">2016-03-21 12:13</td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td><td style="text-align: center; vertical-align: middle; width: 60px; "><span title="" style="overflow: hidden; text-overflow:ellipsis;white-space:nowrap;display: block;width: 150px;"></span></td></tr></tbody></table></div><div class="fixed-table-footer" style="margin-right: 0px;"><table class="table table-hover" style="width: 1519px;"><tbody><tr><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 29px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">合计</div><div class="fht-cell" style="width: 56px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 152px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 59px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 86px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 59px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner"><span id="footerQty">181,490.32</span></div><div class="fht-cell" style="width: 72px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 59px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 73px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner"><span id="footerCostMoney">0</span></div><div class="fht-cell" style="width: 43px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 73px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 130px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 130px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 166px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 166px;"></div></td><td style="text-align: center; vertical-align: middle; "><div class="th-inner">&nbsp;</div><div class="fht-cell" style="width: 166px;"></div></td></tr></tbody></table></div><div class="fixed-table-pagination" style="display: block;"><div class="pull-left pagination-detail"><span class="pagination-info">显示第 1 到第 10 条记录，总共 88 条记录</span><span class="page-list">每页显示 <span class="btn-group dropup"><button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown"><span class="page-size">10</span> <span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li class="active"><a href="javascript:void(0)">10</a></li><li><a href="javascript:void(0)">20</a></li><li><a href="javascript:void(0)">50</a></li><li><a href="javascript:void(0)">100</a></li></ul></span> 条记录</span></div><div class="pull-right pagination"><ul class="pagination"><li class="page-first disabled"><a href="javascript:void(0)">«</a></li><li class="page-pre disabled"><a href="javascript:void(0)">‹</a></li><li class="page-number active"><a href="javascript:void(0)">1</a></li><li class="page-number"><a href="javascript:void(0)">2</a></li><li class="page-number"><a href="javascript:void(0)">3</a></li><li class="page-number"><a href="javascript:void(0)">4</a></li><li class="page-number"><a href="javascript:void(0)">5</a></li><li class="page-next"><a href="javascript:void(0)">›</a></li><li class="page-last"><a href="javascript:void(0)">»</a></li></ul></div></div></div></div><div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+<!-- 
+ * ============================================================== *
+ * 新增/修改货品 Modal                                             *
+ * 外层表格：一行三列，中间列是15px的占位列，另两列分别包含一个表格     *
+ * ============================================================== *
+-->
+<div class="modal fade" id="baseGoodsModal">
+	<div class="modal-dialog" style="width: 710px; height: 90%; overflow: hidden;">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>新增/修改货品</h3>
+			</div>
+			<div class="modal-body"><!-- style="border: 1px red solid"> -->
+				<input id="tbKID" type="hidden">
+				<input id="goodsIsOrder" type="hidden">
+				
+				<ul id="myTab" class="nav nav-tabs" style="display: none;">
+			    <li class="active"><a href="http://kp99.cn//biz/pages/btBaseGoods.jsp#home1" id="store" data-toggle="tab">门店</a></li>
+			    <li><a id="weiXinShop" href="http://kp99.cn//biz/pages/btBaseGoods.jsp#home2" data-toggle="tab">微店</a></li>
+			    </ul>
+			   <div id="myTabContent" class="tab-content">
+			   <div class="tab-pane fade in active" id="home1"><!-- style="border: 1px red solid"> -->
+				<table width="658px" height="353px" style="table-layout: fixed;">
+					<tbody><tr valign="top" align="left">
+						<td width="409px">
+							<table class="table table-field">
+								<tbody><tr>
+									<td colspan="3">
+										<div class="input-group" style="width: 100%">
+											<span class="input-group-addon">名称</span>
+											<input id="tbDescription" type="text" class="form-control">
+										</div>
+									</td>
+								</tr>								
+								<tr>
+									<td class="setting">
+										<div class="input-group" style="display: ">
+											<span class="input-group-addon">类别</span>
+											<input id="tbCategory" type="text" class="form-control">	
+										</div>
+										<div class="input-group" style="display: ">
+											<span class="input-group-addon">规格</span>
+											<input id="tbSeries" type="text" class="form-control">	
+										</div>
+										<div class="input-group" style="display: none">
+											<span class="input-group-addon">货号</span>
+											<input id="tbNumber" type="text" class="form-control">	
+										</div>
+										<div class="input-group" style="display: none">
+											<span class="input-group-addon">货位</span>
+											<input id="tbLocation" type="text" class="form-control">	
+										</div>
+										<div class="input-group" style="display: none">
+											<span class="input-group-addon">品牌</span>
+											<input id="tbBrand" type="text" class="form-control">	
+										</div>
+										
+										<div class="input-group">
+											<span class="input-group-addon">成本</span>
+											<input id="tbCostPrice" type="text" class="form-control" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)">
+											<span class="input-group-addon"><span class="fa fa-jpy"></span></span>
+										</div>
+										<div class="input-group" id="tbQtyGroup">
+											<span class="input-group-addon">库存</span>
+											<input id="tbQty" type="text" class="form-control" onkeyup="clearNoNum(this,3)">
+										</div>
+									</td>
+								</tr>
+							</tbody></table>
+							<div id="isNotUnit">
+								<div class="space5"></div>
+								<table class="table table-bordered table-default">
+									<thead>
+										<tr>
+											<th style="display: ">单位</th>
+											<th>批发价</th>
+											<th style="display: none">零售价</th>
+<!-- 											<th>批发价</th> -->
+<!-- 											<th></th>零售价根据是否开启多价格								 -->
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td style="display: "><input id="tbClass" type="text" class="form-control"></td>
+											<td><input id="tbSalePrice" type="text" class="form-control" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>
+											<td style="display: none"><input id="tbRetailPrice" type="text" class="form-control" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>										
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div id="isUnit" class="hidden">
+								<table class="table table-bordered table-multi">
+									<thead>
+										<tr>
+											<th>多单位</th>
+											<th>比例</th>
+											<th>批发价</th>
+											<th style="display: none">零售价</th>
+<!-- 											<th>批发价</th> -->
+<!-- 											<th>零售价</th>零售价根据是否开启多价格								 -->
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><input id="baseUnit" type="text" class="form-control base_unit" onkeyup="setUnit()"></td>
+											<td><input type="text" class="form-control" value="基本单位"></td>
+											<td><input id="basePrice" type="text" class="form-control base_sale_price" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>
+											<td style="display: none"><input id="baseRetailPrice" type="text" class="form-control base_retail_price" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>										
+										</tr>
+										<tr>
+											<td><input id="secondUnit" type="text" class="form-control second_unit" onkeyup="setUnit()"></td>
+											<td><input id="unitRatio1" type="text" class="form-control unit_ratio1" maxlength="8" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"><span class="base_unit01"></span></td>										
+											<td><input id="secondPrice" type="text" class="form-control second_sale_price" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>
+											<td style="display: none"><input id="secondRetailPrice" type="text" class="form-control second_retail_price" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>
+										</tr>
+										<tr>
+											<td><input id="thirdUnit" type="text" class="form-control third_unit" onkeyup="setUnit()"></td>
+											<td><input id="unitRatio2" type="text" class="form-control  unit_ratio2" maxlength="8" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"><span class="second_unit01"></span></td>										
+											<td><input id="thirdPrice" type="text" class="form-control third_sale_price" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>
+											<td style="display: none"><input id="thirdRetailPrice" type="text" class="form-control third_retail_price" onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="space5"></div>
+							<table class="table-remark">
+								<tbody>
+									<tr>
+										<td class="tdBarcodes">
+											<div class="input-group">
+												<span class="input-group-addon">条码</span>
+												<input id="tbBarcode" type="text" class="form-control">
+												<span class="input-group-btn fa fa-plus" id="addBarcode" style="display: "></span>								
+											</div>
+											<span class="BarcodesQun">条码（<span>3</span>）<i class="input-group-btn fa fa-angle-down"></i></span>
+											<div id="Barcodes"></div>
+											<div class="space5"></div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+										<div style="display: ">
+											<div class="input-group">
+												<span class="input-group-addon">备注</span>
+												<input id="tbRemark" type="text" class="form-control">
+											</div>
+										</div></td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+						<td width="15px"></td>
+						<td width="235px">
+							<table width="235px" height="353px" style="table-layout: fixed;">
+								<tbody><tr>
+									<td>
+										<form id="fileImg" method="post" enctype="multipart/form-data">
+											<div id="preview" style="width: 230px; background:#fff; border-radius: 6px; box-shadow: 0px 0px 12px #102e34;">
+												<img width="100%" height="300px" id="pd_img" alt="货品图片" src="./noimage.jpg" class="center-block">
+												<div id="div0" class="box0" style="display:none"><a onclick="changeImg(0)" href="javascript:void(0)" title="切换图片"><img id="img0" width="30px" height="40px" src="./noimage.jpg"></a><div class="box-1"><a onclick="deleteImg(0)" href="javascript:void(0)" title="删除图片"><img id="img-1" width="15px" height="15px" src="./delete.png"></a></div></div>
+												<div id="div1" class="box1" style="display:none"><a onclick="changeImg(1)" href="javascript:void(0)" title="切换图片"><img id="img1" width="30px" height="40px" src="./noimage.jpg"></a><div class="box-1"><a onclick="deleteImg(1)" href="javascript:void(0)" title="删除图片"><img id="img-1" width="15px" height="15px" src="./delete.png"></a></div></div>
+												<div id="div2" class="box2" style="display:none"><a onclick="changeImg(2)" href="javascript:void(0)" title="切换图片"><img id="img2" width="30px" height="40px" src="./noimage.jpg"></a><div class="box-1"><a onclick="deleteImg(2)" href="javascript:void(0)" title="删除图片"><img id="img-1" width="15px" height="15px" src="./delete.png"></a></div></div>
+												<div id="div3" class="box3" style="display:none"><a onclick="changeImg(3)" href="javascript:void(0)" title="切换图片"><img id="img3" width="30px" height="40px" src="./noimage.jpg"></a><div class="box-1"><a onclick="deleteImg(3)" href="javascript:void(0)" title="删除图片"><img id="img-1" width="15px" height="15px" src="./delete.png"></a></div></div>
+												<div id="div4" class="box4" style="display:none"><a onclick="changeImg(4)" href="javascript:void(0)" title="切换图片"><img id="img4" width="30px" height="40px" src="./noimage.jpg"></a><div class="box-1"><a onclick="deleteImg(4)" href="javascript:void(0)" title="删除图片"><img id="img-1" width="15px" height="15px" src="./delete.png"></a></div></div>
+												<div id="div5" class="box5" style="display:none"><a onclick="changeImg(5)" href="javascript:void(0)" title="切换图片"><img id="img5" width="30px" height="40px" src="./noimage.jpg"></a><div class="box-1"><a onclick="deleteImg(5)" href="javascript:void(0)" title="删除图片"><img id="img-1" width="15px" height="15px" src="./delete.png"></a></div></div>
+											</div>
+											<div class="space20"></div>
+											<div><input id="imagefile" type="file" name="file" onchange="previewImage(this,230,300)" data-filename-placement="inside"></div>
+										</form>
+									</td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+				</tbody></table>
+				<div class="space5"></div>
+				
+				<!-- 二维库存 -->
+				<div id="divDimensionLoading" class="hidden"><i class="fa fa-spinner fa-spin"></i>正在努力地加载数据中，请稍候……</div>
+				<div id="DimensionContent" class="hidden">
+					<button onclick="CreateDimensionOne(this)" class="btn btn-default one_Name" id=""><i class="fa"></i></button>
+					<button onclick="CreateDimensionSec(this)" class="btn btn-default sec_Name" id=""><i class="fa"></i></button>
+					<table border="0" cellspacing="1" width="100%" class="gridtable" id="DimensionTable"></table>		
+				</div>
+			<div class="modal-footer">
+				<span id="indexGoods" style="color:red"></span>
+				<input id="cb_auto" type="checkbox"><span>切换项自动保存</span>
+            	<button id="upGoods" type="button" class="btn btn-primary" onclick="upGoods();"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>上一项</button>
+				<button id="copyGoods" type="button" class="btn btn-primary" onclick="copyGoods();"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span id="copyGoodsLabel">复制新增</span></button>
+   				<button id="saveGoods" type="button" class="btn btn-primary" onclick="saveGoods(1);"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存提交</button>
+   				<button id="nextGoods" type="button" class="btn btn-primary" onclick="nextGoods();"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>下一项</button>
+         	</div>
+			 </div>  <!-- home1 end -->
+			 <div class="tab-pane fade" id="home2">   <!-- home2 end -->
+				<table width="658px" height="100px" style="table-layout: fixed;">
+					<tbody><tr valign="top" align="left">
+						<td>
+							<div class="input-group" style="width: 100%">
+								<span class="input-group-addon">名称</span>
+								<input id="weixinTitle" name="Title" type="text" class="form-control">
+							</div>
+							
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group" id="WeiXinAuthorID">
+				               <span class="input-group-addon">开放程度</span>
+				            </div><!-- /input-group -->
+						</td>
+					</tr>
+					
+					<tr id="showEffect">
+						<td>
+							<div class="input-group" id="effect">
+				               <span class="input-group-addon">展示效果</span>
+				               <input name="ShowEffect" id="ShowEffect_1" value="-1" type="radio" class="form-control" style="width:20px;margin:5px">无效果
+				               <input name="ShowEffect" id="ShowEffect_2" value="1" type="radio" class="form-control" style="width:20px;margin:5px">滚动
+				            </div><!-- /input-group -->
+						</td>
+					</tr>
+					<tr id="divImg">
+						<td>
+							<div class="input-group" id="album">
+				               <span class="input-group-addon">商品相框</span>
+				               <form id="showImg" method="post" enctype="multipart/form-data">
+				               	<input type="file" id="up" name="file" class="form-control">
+				               </form>
+				            </div><!-- /input-group -->
+						</td>
+					</tr>
+					
+					<tr id="imgArr">
+						<td>
+							<div class="input-group" id="imgList">
+				              	<img id="ImgPr0" width="120" height="120" isexisted="0">
+				    			<img id="ImgPr1" width="120" height="120" isexisted="0">
+				    			<img id="ImgPr2" width="120" height="120" isexisted="0">
+				    			<img id="ImgPr3" width="120" height="120" isexisted="0">
+				    			<img id="ImgPr4" width="120" height="120" isexisted="0">
+				            </div><!-- /input-group -->
+						</td>
+					</tr>
+					<tr id="shopInfo">
+						<td>
+							<span class="input-group-addon">商品描述</span>
+							<div class="input-group" style="width: 100%">
+				               <iframe src="./uEditor.html" style="width:98%;height:340px"></iframe>
+				            </div><!-- /input-group -->
+						</td>
+					</tr>
+					<tr id="reankDiv">
+						<td>
+							<div class="input-group">
+								<button type="button" class="btn btn-primary">相关推荐</button>
+							</div>
+							<div style="width:100%" id="reankGoods">
+							</div>
+						</td>
+					</tr>
+					<tr id="reankList">
+						<td>
+							<div class="dropdown">
+								  <div class="btn-group">
+								   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="float:" left;"="" id="reankMenu">
+								   	 	<!--   默认 <span class="caret"></span> -->
+								   </button>
+						   		   <div class="input-group" style="float: left;width:50%">
+							          <input type="text" class="form-control" style="width: 200px">
+							          <span class="input-group-addon glyphicon glyphicon-search" onclick="searchRecommend()"></span>
+							       </div>
+								   <ul class="dropdown-menu" role="menu">
+								      <!-- <li><a href="#">功能</a></li>
+								      <li><a href="#">另一个功能</a></li>
+								      <li><a href="#">其他</a></li>
+								      <li class="divider"></li>
+								      <li><a href="#">分离的链接</a></li> -->
+								   </ul>
+								</div>
+							   <div class="panel panel-default" style="height: 248px;overflow-y: scroll;overflow-x:hidden;">
+   									<table id="data">
+   										<tbody id="dataBody">
+   										</tbody>
+   									</table>
+   							   </div>	
+						</div></td>
+					</tr>
+				</tbody></table>
+				<div class="modal-footer">
+					<span id="indexGoods" style="color:red"></span>
+	            	<button id="upGoods" type="button" class="btn btn-primary" onclick="upWeiXinGoods();"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>上一项</button>
+	   				<button id="saveGoods" type="button" class="btn btn-primary" onclick="saveWeiXinGoods();"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存提交</button>
+	   				<button id="nextGoods" type="button" class="btn btn-primary" onclick="nextWeiXinGoods();"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>下一项</button>
+	         	</div>
+			</div>
+			</div>
+			</div><!-- modal body -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<div class="modal fade" id="DimensionGoodsModalOne">
+	<div class="modal-dialog" style="width: 500px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title">颜色添加</h3>
+			</div>
+			<div class="modal-body">
+			<div class="">
+					<div class="row">					
+					<div class="selectdimensionone">
+	
+					</div>				
+					</div>
+				</div> 
+				
+			</div><!-- modal body -->
+			<div class="modal-footer">
+   				<button id="btnconfirmone" type="button" class="btn btn-primary" onclick="SaveDimensionOne();"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>确定</button>
+   				<button id="btncancelone" type="button" class="btn btn-primary" onclick="CancelDimensionOne();"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>取消</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+<div class="modal fade" id="DimensionGoodsModalSec">
+	<div class="modal-dialog" style="width: 500px;">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title">尺码添加</h3>
+			</div>
+			<div class="modal-body">
+			<div class="">
+					<div class="row">					
+					<div class="selectdimensionsec">
+	
+					</div>				
+					</div>
+				</div> 
+				
+			</div><!-- modal body -->
+			<div class="modal-footer">
+   				<button id="btnconfirmsec" type="button" class="btn btn-primary" onclick="SaveDimensionSec();"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>确定</button>
+   				<button id="btncancelsec" type="button" class="btn btn-primary" onclick="CancelDimensionSec();"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>取消</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+<!-- 导入 Modal -->
+<div class="modal fade" id="importModal">
+	<div class="modal-dialog" style="width: 300px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title"><span class="glyphicon glyphicon-import" aria-hidden="true"></span>导入货品</h3>
+			</div>
+			<div class="modal-body">
+				<table>
+					<!-- <tr>
+						<td><span style="color:red">[只做新增导入，请不要重复导入]</span></td>
+					</tr> -->
+					<tbody><tr><td><div class="space5"></div></td></tr>
+					<tr>
+						<td>
+							<form id="fileUp" method="post" enctype="multipart/form-data">
+								<input type="file" id="goodsfile" name="goodsfile" style="width: 100%;" data-filename-placement="inside">
+							</form>
+						</td>
+					</tr>
+				</tbody></table>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+            	<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+            	<button type="button" class="btn btn-primary" onclick="uploadGoods(this);"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<!-- 导出 Modal -->
+<div class="modal fade" id="exportModal">
+	<div class="modal-dialog" style="width: 300px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title"><span class="glyphicon glyphicon-export" aria-hidden="true"></span>导出货品</h3>
+			</div>
+			<div class="modal-body">
+				<table id="exportContent"></table>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+            	<button type="button" class="btn btn-primary" onclick="toExportGoods(this);"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<!-- 清空货品 Modal -->
+<div class="modal fade" id="clearGoodsModal">
+	<div class="modal-dialog" style="width: 300px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>清空货品</h3>
+			</div>
+			<div class="modal-body">
+				<table>
+					<tbody><tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">密码</span>
+								<input id="clearpwd" type="password" class="form-control">
+								<span class="input-group-addon"><span class="fa fa-lock"></span></span>
+							</div>
+						</td>
+					</tr>
+				</tbody></table>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+            	<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+            	<button type="button" class="btn btn-primary" onclick="clearData();"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<!-- 修改库存 Modal -->
+<div class="modal fade" id="updateStockModal">
+	<div class="modal-dialog" style="width: 300px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>修改库存</h3>
+			</div>
+			<div class="modal-body">
+				<input id="responseCaptcha" type="hidden">
+				<input id="bossPhone" type="hidden" value="13580426801">
+				<table>
+					<tbody><tr>
+						<td><input type="checkbox" id="cb_allGoods" name="cb_allGoods"><span>&nbsp;全部货品</span><span id="stocks" style="color:red; font-style: italic;" class="pull-right"></span></td>
+					</tr>
+					<tr><td><div class="space5"></div></td></tr>
+					<tr>
+						<td>
+							<div class="input-group" style="width: 100%">
+								<span class="input-group-addon"><span class="fa fa-cube"></span></span>
+								<input id="txtStock" type="text" class="form-control" placeholder="请输入库存..." onclick="getCursortPosition(this)" onkeyup="clearNoNum(this,3)">
+								<!-- <span class="input-group-addon">库存数量</span> -->
+							</div>
+						</td>
+					</tr>
+					<tr><td><div class="space5"></div></td></tr>
+						<tr><td>
+							<div class="input-group" style="width: 100%">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+								<input id="txtBossPhone" type="text" class="form-control" readonly="" value="13580426801">
+							</div>
+						</td>
+					</tr>
+					<tr><td><div class="space5"></div></td></tr>
+					<tr>
+						<td>
+							<div class="input-group" style="width: 100%">
+								<span class="input-group-addon"><span class="fa fa-send"></span></span>
+								<input id="captcha" type="text" class="form-control" placeholder="请输入验证码...">
+								<span class="input-group-btn">
+									<button id="btnCaptcha" type="button" class="btn btn-warning" onclick="getCaptcha();">点击获取</button>
+						  		</span>
+							</div>
+						</td>
+					</tr>
+				</tbody></table>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+            	<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+            	<button type="button" class="btn btn-primary" onclick="updateStock();"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<!-- 查看货品图片（模态框） -->
+<div class="modal fade" id="goodsImageModal">
+	<div class="modal-dialog" style="width: 360px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span>货品图片</h3>
+			</div>
+			<div class="modal-body" id="goodsImageModalBody">
+				<!--  
+				<div id="goods-image-carousel" class="carousel slide" data-ride="carousel">
+					<ol class="carousel-indicators">
+					  <li data-target="#goods-image-carousel" data-slide-to="0" class="active"></li>
+					  <li data-target="#goods-image-carousel" data-slide-to="1"></li>
+					</ol>
+					<div class="carousel-inner" role="listbox">
+						<div class="item active">
+							<img src="../../images/1.jpg" class="center-block">
+							<div class="carousel-caption"></div>
+						</div>
+						<div class="item">
+							<img src="../../images/2.jpg" class="center-block">
+							<div class="carousel-caption"></div>
+						</div>
+					</div>
+					<a class="left carousel-control" href="#goods-image-carousel" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+					</a>
+					<a class="right carousel-control" href="#goods-image-carousel" role="button" data-slide="next">
+				    	<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					</a>
+				</div>
+				-->
+			</div><!-- modal body -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<script type="text/javascript">
+/**
+ * 显示货品图片旋转木马
+ * 
+ * @param defaultImageKID 默认的图片KID
+ * @param imageKIDList 图片KID列表
+ */
+function showCarousel(defaultImageKID, imageKIDList) {
+	var carouselSlide = '<div id="goods-image-carousel" class="carousel slide" data-ride="carousel">';
+	var carouselIndicators = '<ol class="carousel-indicators">';
+	var carouselInner = '<div class="carousel-inner" role="listbox">';
+	
+	var prev = '<a class="left carousel-control" href="#goods-image-carousel" role="button" data-slide="prev">' + 
+			       '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>' + 
+			       '<span class="sr-only">Previous</span>' +
+			   '</a>';
+			   
+	var next = '<a class="right carousel-control" href="#goods-image-carousel" role="button" data-slide="next">' + 
+			       '<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>' + 
+			       '<span class="sr-only">Next</span>' +
+			   '</a>';
+  	  
+    var indicatorsHtml = '<li class="active" data-target="#goods-image-carousel" data-slide-to="0"></li>';
+    var itemsHtml = '<div class="item active">' + 
+					     '<img width="320px" height="425px" src="../../downImage?imageKid=' + defaultImageKID + '&showRawImage=1" class="center-block">' + 
+						 '<div class="carousel-caption"></div>' + 
+					 '</div>';
+			
+	var count = 1;
+	for (var i = 0; i < imageKIDList.length; i++) {
+		if (defaultImageKID != imageKIDList[i]) {
+			indicatorsHtml += '<li data-target="#goods-image-carousel" data-slide-to="' + count + '"></li>';
+			itemsHtml += '<div class="item">' + 
+						     '<img width="320px" height="425px" src="../../downImage?imageKid=' + imageKIDList[i] + '&showRawImage=1" class="center-block">' + 
+							 '<div class="carousel-caption"></div>' + 
+						 '</div>';
+			count++;
+		}
+	}
+		
+	if (imageKIDList.length == 1) {
+//		$("#goodsImageModalBody").html(carouselSlide + carouselInner + itemsHtml + "</div></div>");
+		$('#goodsImageModalBody').html('<img width="320px" height="425px" src="../../downImage?imageKid=' + imageKIDList[0] + '&showRawImage=1" class="center-block">');
+	} else {
+		$('#goodsImageModalBody').html(carouselSlide + carouselIndicators + indicatorsHtml + '</ol>' + carouselInner + itemsHtml + '</div>' + prev + next + '</div>');
+	}
+	
+	$('#goodsImageModal').modal();
+}
+</script>
+
+
+<!-- custom function -->
+<script type="text/javascript" src="./common.js.下载"></script>
+
+<!-- jquery -->
+<script type="text/javascript" src="./jquery-1.10.2.js.下载"></script>
+
+<!-- bootstrap -->
+<script type="text/javascript" src="./bootstrap.js.下载"></script>
+
+<!-- Bootstrap jQuery Plugin -->
+<script type="text/javascript" src="./jquery.bootstrap.min.js.下载"></script>
+
+<!-- bootstrap table -->
+<script type="text/javascript" src="./bootstrap-table.js.下载"></script>
+<script type="text/javascript" src="./bootstrap-table-zh-CN.js.下载"></script>
+
+<!-- bootstrap datetimepicker -->
+<script type="text/javascript" src="./bootstrap-datetimepicker.js.下载"></script>
+<script type="text/javascript" src="./bootstrap-datetimepicker.zh-CN.js.下载"></script>
+<!-- plugin -->
+<script type="text/javascript" src="./jquery.advancedsearch.js.下载"></script>
+<!-- init -->
+<script type="text/javascript">
+	$(function(){
+		// init datetimepicker
+		$('#dtp_start').datetimepicker({
+	        language:  'zh-CN',
+	        weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			forceParse: 0
+	    });
+	    
+		$('#dtp_end').datetimepicker({
+		    language:  'zh-CN',
+		    weekStart: 1,
+		    todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			forceParse: 0
+	    });
+
+		// init bootstrap table
+		$.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN']);
+		$.extend($.fn.bootstrapTable.columnDefaults, {
+	        align: 'center',
+	        valign: 'middle'
+	    });
+
+		// When resize the window, the table header adjust automatically
+		$(window).resize(function () {
+	        $('#bootstrapTable').bootstrapTable('resetView', {height: $(window).height() -  $("#bootstrapTable").offset().top - 2});
+	    });
+	});
+</script>
+<!-- 
+ * ========================================================== *
+ * 通用对话框单元，信息提示框、确认提示框、处理中提示框功能。         *
+ * 单元依赖 bootstrap 、jquery 框架，使用时注意引用顺序                   *
+ * ========================================================== *
+-->
+
+<style type="text/css">
+.close{color: #fff}
+.bootstrap-dialog {
+}
+.bootstrap-dialog .bootstrap-dialog-title {
+  color: #fff;
+  display: inline-block;
+  font-size: 16px;
+}
+.bootstrap-dialog .bootstrap-dialog-message {
+  font-size: 14px;
+}
+.bootstrap-dialog.type-default .modal-header {
+  background-color: #fff;
+}
+.bootstrap-dialog.type-default .bootstrap-dialog-title {
+  color: #333;
+}
+.bootstrap-dialog.type-info .modal-header {
+  background-color: #5bc0de;
+  border-radius: 6px;
+}
+.bootstrap-dialog.type-primary .modal-header {
+  background-color: #428bca;
+    border-radius: 7px 7px 0px 0px;
+  
+}
+.bootstrap-dialog.type-success .modal-header {
+  background-color: #5cb85c;
+    border-radius: 7px 7px 0px 0px;
+  
+}
+.bootstrap-dialog.type-warning .modal-header {
+  background-color: #f0ad4e;
+  border-radius: 7px 7px 0px 0px;
+  
+}
+.bootstrap-dialog.type-danger .modal-header {
+  background-color: #d9534f;
+  border-radius: 7px 7px 0px 0px;
+}
+</style>
+<!-- [处理中]对话框 Modal -->
+<div class="modal fade" id="global-process-modal">
+	<div class="modal-dialog" style="width: 300px">
+		<div class="modal-content" style="border-radius: 9px">
+			<div class="modal-body">
+				<table>
+					<tbody><tr>
+						<td><div id="global-process-loader" style="width: 80px; height: 80px"></div></td>
+						<td><div id="global-process-message"></div></td>
+					</tr>
+				</tbody></table>
+			</div><!-- modal body -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<!-- [提示]对话框  Modal -->
+<div class="modal fade bootstrap-dialog type-info" id="global-alert-modal">
+	<div class="modal-dialog" style="width: 350px">
+		<div class="modal-content" style="border-radius: 9px">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<div class="bootstrap-dialog-title" id="global-alert-title">提示</div>
+			</div>
+			<div class="modal-body">
+				<div class="bootstrap-dialog-message" id="global-alert-message"></div>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+
+
+<!-- [导入提示]对话框  Modal -->
+<div class="modal fade" id="global-alert-modalNew">
+	<div class="modal-dialog" id="global-dialog-widthNew" style="width: 300px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title" id="global-alert-titleNew"><span class="glyphicon glyphicon-import" aria-hidden="true"></span>提示</h3>
+			</div>
+			<div class="modal-body">
+				<div class="bootstrap-dialog-message" id="global-alert-messageNew"></div>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+            	<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+
+
+
+<!-- [确认]对话框  Modal -->
+<div class="modal fade bootstrap-dialog type-primary" id="global-confirm-modal">
+	<div class="modal-dialog" style="width: 350px">
+		<div class="modal-content" style="border-radius: 9px">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<div class="bootstrap-dialog-title" id="global-confirm-title">提示</div>
+			</div>
+			<div class="modal-body">
+				<table>
+					<tbody><tr>
+						<!-- 
+						<td align="left" valign="top"><span class="glyphicon glyphicon-question-sign" style="font-size: 35px"></span></td>
+						 -->
+						 <td align="left" valign="top">
+						 	<img alt="" src="./icon_question_32.png">
+						 </td>
+						<td>
+							<div class="bootstrap-dialog-message" id="global-confirm-message"></div>
+						</td>
+					</tr>
+				</tbody></table>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary" id="global-confirm-confirm">确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<script type="text/javascript" src="./jquery.shCircleLoader.js.下载"></script>
+<script type="text/javascript">
+var gProgressValue = 0; // 进度值
+var gProgressTimer = ""; // 进度 Timer
+
+/**
+ * 显示处理中对话框
+ * @param message 提示文本
+ */
+function showProcessModal(message) {
+	// 显示处理中动画
+	$('#global-process-loader').shCircleLoader();
+
+	gProgressValue = 0;
+	gProgressTimer = setInterval(function() {
+	    $('#global-process-loader').shCircleLoader('progress', gProgressValue + '%');
+	    if (++gProgressValue > 100) {
+	    	gProgressValue = 0;
+	    }
+	}, 100);
+	
+	// 设置文本内容
+	$("#global-process-message").html(message);
+
+	// 显示 Modal 窗口
+	$('#global-process-modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+}
+
+/**
+ * 设置[处理中]对话框的提示内容
+ */
+function setProcessModalMessage(message) {
+	$("#global-process-message").html(message);
+}
+
+
+/**
+ * 关闭[处理中]对话框
+ */
+function hideProcessModal() {
+	clearInterval(gProgressTimer);
+	$('#global-process-loader').shCircleLoader('destroy');
+	$('#global-process-modal').modal("hide");
+}
+
+/**
+ * 显示[提示]对话框
+ * @param message 提示内容
+ * @param title 对话框标题
+ * @param type 对话框类型（影响对话框标题背景颜色）：type-default、type-info、type-primary、type-success、type-warning、type-danger
+ */
+function showAlert(message, type, title) {
+	if (type) {
+		$("#global-alert-modal").attr("class", "modal fade bootstrap-dialog " + type);
+	} else {
+		$("#global-alert-modal").attr("class", "modal fade bootstrap-dialog type-info");
+	}
+	
+	if (title) {
+		$("#global-alert-title").html(title);
+	}
+	
+	$("#global-alert-message").html(message);
+	$("#global-alert-modal").modal();
+}
+
+/**
+ * 显示[提示]对话框 
+ * @param message 提示内容
+ * @param title 对话框标题
+ * @param width 弹出框宽度 
+ */
+function showAlertNew(message, width, title) {
+	if(width){
+		$("#global-dialog-widthNew").width(width);
+	}
+	
+	if (title) {
+		$("#global-alert-titleNew").html(title);
+	}
+	
+	$("#global-alert-messageNew").html(message);
+	$("#global-alert-modalNew").modal();
+}
+
+/**
+ * 显示[确认]对话框
+ * @param message 提示内容
+ * @param title 对话框标题
+ * @param fn 回调函数
+ * @param type 对话框类型（影响对话框标题背景颜色）：type-default、type-info、type-primary、type-success、type-warning、type-danger
+ */
+function showConfirm(message, fn, type, title) {
+	if (type) {
+		$("#global-confirm-modal").attr("class", "modal fade bootstrap-dialog " + type);
+	} else {
+		$("#global-confirm-modal").attr("class", "modal fade bootstrap-dialog type-primary");
+	}
+	
+	if (title) {
+		$("#global-confirm-title").html(title);
+	}
+
+	if (fn) {
+		$("#global-confirm-confirm").unbind("click");
+		$("#global-confirm-confirm").bind("click", function () {
+			$("#global-confirm-modal").modal("hide");
+		});
+		$("#global-confirm-confirm").bind("click", fn);
+	}
+	
+	$("#global-confirm-message").html(message);
+	$("#global-confirm-modal").modal();
+}
+</script>
+<script type="text/javascript" src="./jquery.form.js.下载"></script>
+<script type="text/javascript" src="./jquery.nicescroll.js.下载"></script>
+<script type="text/javascript" src="./previewimg.js.下载"></script>
+<script type="text/javascript" src="./uuid.js.下载"></script>
+<script type="text/javascript" src="./multiUnit.js.下载"></script>
+<script type="text/javascript" src="./btBaseGoods.js.下载"></script>
+
+
+
+<script type="text/javascript">
+		function tagClick(This){
+			var tagname = $(This).attr("tagname");
+			if(tagname == "不开放"){
+				$("#showEffect").hide();
+				$("#divImg").hide();
+				$("#imgArr").hide();
+				$("#shopInfo").hide();
+				$("#reankDiv").hide();
+				$("#reankList").hide();
+			}else{
+				$("#showEffect").show();
+				$("#divImg").show();
+				$("#imgArr").show();
+				$("#shopInfo").show();
+				$("#reankDiv").show();
+				$("#reankList").show();
+			}
+			$("#reankMenu").html("");
+  		 	$("#reankMenu").append(tagname+'<span class="caret"></span>');
+			loadRecommendGoods($(This).val());
+		}
+		
+		function loadRecommendGoods(tagKid){
+			var id = $("#tbKID").val();
+			var url = "http://kp99.cn:80/" +"GoodsServlet?method=loadRecommend&tagKid="+ tagKid +"&tbKID="+id;
+			$.get(url, function(data){
+				$("#dataBody").html("");
+				$("#reankGoods").html("");
+			  	var obj = jQuery.parseJSON(data);
+			  	var existedReankList = obj["existedReankList"];
+				for(var i=0;i<existedReankList.length;i++){
+					var kid = existedReankList[i].KID;
+					var Description = existedReankList[i].Description;
+					var ImageKID = existedReankList[i].ImageKID;
+					var url = ImageKID == null?"../../images/noimage.jpg":"../../downImage?imageKid="+ ImageKID +"&showRawImage=1";
+					$("#reankGoods").append('<div style="width:80px;text-align: center;float: left;"><img src="'+ url +'" style="width:80px;height:85px">'+ Description +'</div>');
+				}
+				
+				var reankGoodsList = obj["reankGoodsList"];
+				
+				for(var i=0;i<reankGoodsList.length;i++){
+					var tagKid = reankGoodsList[i].KID;
+					var Description = reankGoodsList[i].Description;
+					var CostPrice = reankGoodsList[i].CostPrice;
+					var CostMoney = reankGoodsList[i].CostMoney;
+					var Qty = reankGoodsList[i].Qty;
+					var url = reankGoodsList[i].ImageKID == null? "../../images/noimage.jpg":"../../downImage?imageKid="+ reankGoodsList[i].ImageKID +"&showRawImage=1";
+					var html = "";
+					html += '<tr>';
+					html += '<td><div class="input-group"><input name="recommendGoods" type="checkbox" value="'+ tagKid +'" ></div></td>';
+					html += '<td><img style="height:88px;width:89px" src="'+ url +'"></td>';
+					html += '<td valign="bottom"><ul class="list-group">';
+					html += '<li class="list-group-item">'+ Description +'</li>';
+					html += '<li class="list-group-item">数量:'+ Qty +'</li>';
+					html += '<li class="list-group-item">单价:'+ CostPrice +'</li>';
+					html += '</ul></td>';
+					html += '<td valign="bottom" style="padding-left:10px;padding-bottom: 30px"> 金额:'+ CostMoney +'</td>';
+					html += '</tr>';
+					$("#dataBody").append(html);
+				}
+			});
+		};
+		
+		
+		$("#weiXinShop").bind("click", function(){
+			var id = $("#tbKID").val();
+			
+			loadWeixinShop(id);
+		});
+		
+		function loadWeixinShop(ids){
+			var id = ids;
+			var url = "http://kp99.cn:80/" +"GoodsServlet?method=goodsWeiXinShop&tbKID="+id;
+			initParam();
+			bindFunction();
+		  	$.get(url, function(data){
+			  	var obj = jQuery.parseJSON(data);
+			  	
+			  	var tagList = obj["tagList"];  //开放程度设置
+			  	var isCheck = false;
+			  	var tagId = "";
+			  	for(var i=0;i<tagList.length;i++){
+			  		if(tagList[i].TagName=="全部开放" && !isCheck){
+			  			$("#WeiXinAuthorID").append('<input onclick="tagClick(this)" name="WeiXinAuthor" tagName="'+ tagList[i].TagName +'" value="'+ tagList[i].KID +'" type="radio" class="form-control" style="width:20px;margin:5px">' + tagList[i].TagName);
+			  		 	$("input[value='"+ tagList[i].KID +"']").attr("checked", true);
+			  		 	$("#reankMenu").html("");
+			  		 	$("#reankMenu").append(tagList[i].TagName+'<span class="caret"></span>');
+			  		 	tagId = tagList[i].KID;
+			  		}else if((tagList[i].TagKID==tagList[i].KID)){
+			  		 	$("#WeiXinAuthorID").append('<input onclick="tagClick(this)" name="WeiXinAuthor" tagName="'+ tagList[i].TagName +'" value="'+ tagList[i].KID +'" type="radio" class="form-control" style="width:20px;margin:5px">' + tagList[i].TagName);
+			  		 	$("input[value='"+ tagList[i].KID +"']").attr("checked", true);
+			  		 	$("#reankMenu").html("");
+			  		 	$("#reankMenu").html(tagList[i].TagName + '<span class="caret"></span>');
+			  		 	tagId = tagList[i].KID;
+			  		 	isCheck = true;
+			  		 }else{
+			  			$("#WeiXinAuthorID").append('<input onclick="tagClick(this)" tagName="'+ tagList[i].TagName +'" name="WeiXinAuthor" value="'+ tagList[i].KID +'" type="radio" class="form-control" style="width:20px;margin:5px">' + tagList[i].TagName);
+			  		 }
+			  	}
+			  	
+			  	var ueditMap = obj["ueditMap"];
+				$("#weixinTitle").val(ueditMap.Title);
+				if(ueditMap.ShowEffect==1){
+					$("#ShowEffect_2").attr("checked",true);
+				}else{$("#ShowEffect_1").attr("checked",true);}
+			  	var iframe = $("iframe")[0];
+				iframe.contentWindow.setContent(ueditMap.Content);
+				var imgList = obj["imgList"];
+				for(var i=0;i<imgList.length;i++){
+					var ImageKID = imgList[i].ImageKID;
+					$("#ImgPr"+i).attr("src","../../downImage?imageKid="+ ImageKID +"&showRawImage=1")
+					$("#ImgPr"+i).attr("isExisted","1");
+				}
+				loadRecommendGoods(tagId);
+			});
+		}
+		
+		function initParam(){
+			$("#WeiXinAuthorID").html('<span class="input-group-addon">开放程度</span>');
+			$("#effect").html('<span class="input-group-addon">展示效果</span> <input name="ShowEffect" id="ShowEffect_1" value="-1" type="radio" class="form-control" style="width:20px;margin:5px">无效果  <input name="ShowEffect" id="ShowEffect_2" value="1" type="radio" class="form-control" style="width:20px;margin:5px">滚动 ');
+			$("#album").html('<span class="input-group-addon">商品相框</span> <form id="showImg" method="post" enctype="multipart/form-data"><input type="file" id="up" name="file" class="form-control" /> </form>');
+			$("#imgList").html('<img id="ImgPr0" width="120" height="120" isExisted="0" /><img id="ImgPr1" width="120" height="120" isExisted="0" /><img id="ImgPr2" width="120" height="120" isExisted="0" /><img id="ImgPr3" width="120" height="120" isExisted="0" /><img id="ImgPr4" width="120" height="120" isExisted="0" />');
+			var iframe = $("iframe")[0];
+			var content = iframe.contentWindow.setContent("");
+		}
+		
+		function bindFunction(){
+			document.getElementById('up').onchange = function(evt) {
+			    if (!window.FileReader) return;  
+			    var files = evt.target.files;
+			    var This = $("#up");
+			    for (var i = 0, f; f = files[i]; i++) {  
+			        if (!f.type.match('image.*')) {  
+			            continue;  
+			        }
+			        var reader = new FileReader();  
+			        reader.onload = (function(theFile) {
+			            return function(e) {
+			            	for(var i=0;i<5;i++){
+			            		if($("#ImgPr"+i).attr("isExisted") == 0){
+			                		$("#ImgPr"+i).attr("src", e.target.result);  
+			                		$("#ImgPr"+i).attr("isExisted",1);
+			                		This.attr("id","up"+i)
+			                		This.css("display","none");
+			                		$("#showImg").append('<input type="file" id="up" name="file" class="form-control" />');
+			                		bindFunction();
+			                		break;
+			            		}
+			            	}
+			            };
+			        })(f);
+			        reader.readAsDataURL(f);  
+			    }
+			}
+		}
+		
+		function searchRecommend(){
+			
+		}
+</script></body></html>

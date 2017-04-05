@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0024)http://kp99.cn/login.jsp -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>快批</title>
+<link rel="Shortcut Icon" href="http://kp99.cn/images/kp_title.png"> 
+<link rel="stylesheet" type="text/css" href="./注册_files/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="./注册_files/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="./注册_files/popup.css">
+<link rel="stylesheet" type="text/css" href="./注册_files/kp_style.css">
+<link rel="stylesheet" type="text/css" href="./注册_files/animate.min.css">
+</head>
+<body>
+<input id="responseCaptcha" type="hidden" value="">
+<form action="http://kp99.cn/biz/pages/index.jsp" method="post" style="display: none">
+	<input id="paramEnterpriseKID" name="enterpriseKID" type="hidden">
+	<input id="paramEnterpriseImagesKID" name="enterpriseImagesKID" type="hidden">
+	<input id="paramEnterpriseName" name="enterpriseName" type="hidden">
+	<input id="paramUserName" name="username" type="hidden">
+	<input id="paramMultiEnterprise" name="multiEnterprise" type="text">
+	<input id="paramProperty" name="propert" type="hidden">
+	<input id="paramDimension" name="dimension" type="hidden">
+	<input id="paramQtyScale" name="Qty_Scale" type="hidden">
+	<input id="paramMoneyScale" name="Money_Scale" type="hidden">
+	<input id="paramPhone" name="phone" type="hidden">
+	<input id="paramPassword" name="pwd" type="hidden">
+	<input id="paramEnableMultiUnit" name="Enable_Multi_Unit" type="hidden">
+	<input id="paramEnable2DTable" name="Enable_2D_Table" type="hidden">
+	<input id="paramPDAStorage" name="PDA_Storage" type="hidden">
+	<input id="paramSERVERStorage" name="SERVER_Storage" type="hidden">
+	<input id="paramDefaultStorage" name="defaultStorageKID" type="hidden">
+	<input id="paramIsOpenMultiCode" name="IsOpen_Multi_Code" type="hidden">
+	<input id="paramPDAMultiCode" name="PDA_Multi_Code" type="hidden">
+	<input id="paramPDAGoodsWholeSaleTitle" name="PDA_Goods_WholeSale_Title" type="hidden">
+	<input id="paramPDAGoodsRetailTitle" name="PDA_Goods_Retail_Title" type="hidden">
+	<input id="paramPDAGoodsRetailShow" name="PDA_Goods_Retail_Show" type="hidden">
+	<input id="paramPDAEnableMultiPrice" name="PDA_Enable_Multi_Price" type="hidden">
+	<input type="submit" id="submitLogin" value="submit">
+</form>
+
+<div id="headbox">
+	<div class="title">
+		<a href="http://kuaipi.com.cn/"><span class="website pull-right">官方网站</span></a>
+	</div>
+</div>
+
+<div id="loginBanner">
+	<div id="loginBackground">
+		<div id="loginBody">
+		    <!-- 登录框 -->
+			<div id="loginbox" class="animated slideInLeft" style="height: 370px;">
+		        <form class="loginform">
+		            <div class="control-group normal_text">
+		                <h3>登录系统</h3>
+		            </div>
+		            <div class="control-group">
+		                <div class="controls">
+		                    <div class="main_input_box">
+		                        <span class="add-on"> <i class="fa fa-mobile fa-lg left_icon"></i></span>
+		                        <input type="text" class="text-input" placeholder="请输入手机号码..." id="phone" value="">
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="control-group">
+		                <div class="controls">
+		                    <div class="main_input_box">
+		                        <span class="add-on"><i class="fa fa-key left_icon"></i></span>
+		                        <input type="password" class="text-input" placeholder="请输入密码..." id="password" value="">
+		                    </div>
+		                </div>
+		            </div>		          
+		            <div class="control-group" id="divCaptcha" style="display: none;">
+		                <div class="controls">
+		                    <div class="main_input_box textleft">
+		                     <span class="add-on"><i class="fa fa-send left_icon" style="margin-left: 18px"></i></span>
+		                        <input type="text" class="password-input" placeholder="请输入验证码..." id="captcha">
+		                        <button type="button" class="btn-save" onclick="getCaptcha();" id="btncaptcha">点击获取</button>
+		                    </div>
+		                </div>
+		            </div>
+		              <div class="control-group">
+		                <div class="controls">
+		                    <div class="main_input_box textleft">
+		                        <input type="checkbox" class="checkbox" style="display: inline-block;" id="autoLogin">
+		                        <span class="text">自动登录</span>
+		                        <a onclick="openForgetModal();" class="text" style="color:#428BCA;margin-left: 200px"><i>忘记密码</i></a>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="space20"></div>
+		            <div class="control-group">
+		                <div class="controls">
+		                    <div class="main_input_box ">
+		                       <button type="button" class="btn-save btn-large" onclick="checkLogin();"><span class="fa fa-check"></span> 登录</button>
+		                    </div>
+		                </div>
+		            </div>
+		        </form>
+		    </div>
+		    <div class="space14"></div>
+		</div>
+	</div>
+</div>
+
+<!-- 版权 -->
+<div id="Copyright">
+	<span>版权所有 2017 广州联欣</span>
+	<span><a href="http://www.miitbeian.gov.cn/" style="color:#858585;">备案号：粤B2-20050670号-9</a></span>
+</div>
+
+<!-- 忘记密码对话框（模态框） -->
+<div class="modal fade" id="forgetModal">
+	<div class="modal-dialog" style="width: 450px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title">修改密码登录</h3>
+			</div>
+			<div class="modal-body">
+				<div id="loginbox" style="height: 351px; margin-top: 0px; box-shadow: 0px 0px 12px #ffffff">
+			        <form class="loginform">
+			            <div class="control-group">
+			                <div class="controls">
+			                    <div class="main_input_box" id="InputPhone">
+			                        <span class="add-on"><i class="fa fa-mobile fa-lg left_icon"></i></span>
+			                        <input type="text" class="text-input" placeholder="请输入手机号码..." id="forgetPhone" onblur="reloadMyEnterprise();">
+			                    </div>
+			                </div>
+			            </div>
+			            <div class="control-group">
+			                <div class="controls">
+			                    <div class="main_input_box">
+			                        <span class="add-on"><i class="fa fa-key left_icon"></i></span>
+			                        <input type="password" class="text-input" placeholder="请输入新密码..." id="forgetPassword" value="">
+			                    </div>
+			                </div>
+			            </div>
+			            
+			            <div class="control-group">
+			                <div class="controls">
+			                    <div class="main_input_box">
+			                    	<span class="add-on"><i class="fa fa-building left_icon"></i></span>
+									<select class="text-input" id="shop"><option value="selectShop">请选择企业</option></select>
+			                    </div>
+			                </div>
+			            </div>
+			            
+			            <div class="control-group">
+			                <div class="controls">
+			                    <div class="main_input_box textleft">
+			                    	<span class="add-on"><i class="fa fa-send left_icon" style="margin-left: 18px"></i></span>
+			                        <input type="text" class="password-input" placeholder="请输入验证码..." id="forgetCaptcha">
+			                        <button id="forgetBtnCaptcha" type="button" class="btn-save" onclick="getCaptcha(1);">点击获取</button>
+			                    </div>
+			                </div>
+			            </div>
+			            <div class="space20"></div>
+			            <div class="control-group">
+			                <div class="controls">
+			                    <div class="main_input_box ">
+			                       <button type="button" class="btn-save btn-large" onclick="updateLogin();"><span class="fa fa-check"></span> 修改密码登录</button>
+			                    </div>
+			                </div>
+			            </div>
+			        </form>
+			    </div>
+			</div><!-- modal body -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<script type="text/javascript" src="./注册_files/jquery-1.10.2.js.下载"></script>
+<script type="text/javascript" src="./注册_files/bootstrap.js.下载"></script>
+<!-- 
+ * ========================================================== *
+ * 通用对话框单元，信息提示框、确认提示框、处理中提示框功能。         *
+ * 单元依赖 bootstrap 、jquery 框架，使用时注意引用顺序                   *
+ * ========================================================== *
+-->
+
+<style type="text/css">
+.close{color: #fff}
+.bootstrap-dialog {
+}
+.bootstrap-dialog .bootstrap-dialog-title {
+  color: #fff;
+  display: inline-block;
+  font-size: 16px;
+}
+.bootstrap-dialog .bootstrap-dialog-message {
+  font-size: 14px;
+}
+.bootstrap-dialog.type-default .modal-header {
+  background-color: #fff;
+}
+.bootstrap-dialog.type-default .bootstrap-dialog-title {
+  color: #333;
+}
+.bootstrap-dialog.type-info .modal-header {
+  background-color: #5bc0de;
+  border-radius: 6px;
+}
+.bootstrap-dialog.type-primary .modal-header {
+  background-color: #428bca;
+    border-radius: 7px 7px 0px 0px;
+  
+}
+.bootstrap-dialog.type-success .modal-header {
+  background-color: #5cb85c;
+    border-radius: 7px 7px 0px 0px;
+  
+}
+.bootstrap-dialog.type-warning .modal-header {
+  background-color: #f0ad4e;
+  border-radius: 7px 7px 0px 0px;
+  
+}
+.bootstrap-dialog.type-danger .modal-header {
+  background-color: #d9534f;
+  border-radius: 7px 7px 0px 0px;
+}
+</style>
+<!-- [处理中]对话框 Modal -->
+<div class="modal fade" id="global-process-modal">
+	<div class="modal-dialog" style="width: 300px">
+		<div class="modal-content" style="border-radius: 9px">
+			<div class="modal-body">
+				<table>
+					<tbody><tr>
+						<td><div id="global-process-loader" style="width: 80px; height: 80px"></div></td>
+						<td><div id="global-process-message"></div></td>
+					</tr>
+				</tbody></table>
+			</div><!-- modal body -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<!-- [提示]对话框  Modal -->
+<div class="modal fade bootstrap-dialog type-info" id="global-alert-modal">
+	<div class="modal-dialog" style="width: 350px">
+		<div class="modal-content" style="border-radius: 9px">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<div class="bootstrap-dialog-title" id="global-alert-title">提示</div>
+			</div>
+			<div class="modal-body">
+				<div class="bootstrap-dialog-message" id="global-alert-message"></div>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+
+
+<!-- [导入提示]对话框  Modal -->
+<div class="modal fade" id="global-alert-modalNew">
+	<div class="modal-dialog" id="global-dialog-widthNew" style="width: 300px">
+		<div class="modal-content">
+			<div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			   <h3 class="modal-title" id="global-alert-titleNew"><span class="glyphicon glyphicon-import" aria-hidden="true"></span>提示</h3>
+			</div>
+			<div class="modal-body">
+				<div class="bootstrap-dialog-message" id="global-alert-messageNew"></div>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+            	<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+
+
+
+<!-- [确认]对话框  Modal -->
+<div class="modal fade bootstrap-dialog type-primary" id="global-confirm-modal">
+	<div class="modal-dialog" style="width: 350px">
+		<div class="modal-content" style="border-radius: 9px">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<div class="bootstrap-dialog-title" id="global-confirm-title">提示</div>
+			</div>
+			<div class="modal-body">
+				<table>
+					<tbody><tr>
+						<!-- 
+						<td align="left" valign="top"><span class="glyphicon glyphicon-question-sign" style="font-size: 35px"></span></td>
+						 -->
+						 <td align="left" valign="top">
+						 	<img alt="" src="./注册_files/icon_question_32.png">
+						 </td>
+						<td>
+							<div class="bootstrap-dialog-message" id="global-confirm-message"></div>
+						</td>
+					</tr>
+				</tbody></table>
+			</div><!-- modal body -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary" id="global-confirm-confirm">确定</button>
+         	</div><!-- modal footer -->
+		</div><!-- modal content -->
+	</div><!-- modal dialog -->
+</div><!-- modal -->
+
+<script type="text/javascript" src="./注册_files/jquery.shCircleLoader.js.下载"></script>
+<script type="text/javascript">
+var gProgressValue = 0; // 进度值
+var gProgressTimer = ""; // 进度 Timer
+
+/**
+ * 显示处理中对话框
+ * @param message 提示文本
+ */
+function showProcessModal(message) {
+	// 显示处理中动画
+	$('#global-process-loader').shCircleLoader();
+
+	gProgressValue = 0;
+	gProgressTimer = setInterval(function() {
+	    $('#global-process-loader').shCircleLoader('progress', gProgressValue + '%');
+	    if (++gProgressValue > 100) {
+	    	gProgressValue = 0;
+	    }
+	}, 100);
+	
+	// 设置文本内容
+	$("#global-process-message").html(message);
+
+	// 显示 Modal 窗口
+	$('#global-process-modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+}
+
+/**
+ * 设置[处理中]对话框的提示内容
+ */
+function setProcessModalMessage(message) {
+	$("#global-process-message").html(message);
+}
+
+
+/**
+ * 关闭[处理中]对话框
+ */
+function hideProcessModal() {
+	clearInterval(gProgressTimer);
+	$('#global-process-loader').shCircleLoader('destroy');
+	$('#global-process-modal').modal("hide");
+}
+
+/**
+ * 显示[提示]对话框
+ * @param message 提示内容
+ * @param title 对话框标题
+ * @param type 对话框类型（影响对话框标题背景颜色）：type-default、type-info、type-primary、type-success、type-warning、type-danger
+ */
+function showAlert(message, type, title) {
+	if (type) {
+		$("#global-alert-modal").attr("class", "modal fade bootstrap-dialog " + type);
+	} else {
+		$("#global-alert-modal").attr("class", "modal fade bootstrap-dialog type-info");
+	}
+	
+	if (title) {
+		$("#global-alert-title").html(title);
+	}
+	
+	$("#global-alert-message").html(message);
+	$("#global-alert-modal").modal();
+}
+
+/**
+ * 显示[提示]对话框 
+ * @param message 提示内容
+ * @param title 对话框标题
+ * @param width 弹出框宽度 
+ */
+function showAlertNew(message, width, title) {
+	if(width){
+		$("#global-dialog-widthNew").width(width);
+	}
+	
+	if (title) {
+		$("#global-alert-titleNew").html(title);
+	}
+	
+	$("#global-alert-messageNew").html(message);
+	$("#global-alert-modalNew").modal();
+}
+
+/**
+ * 显示[确认]对话框
+ * @param message 提示内容
+ * @param title 对话框标题
+ * @param fn 回调函数
+ * @param type 对话框类型（影响对话框标题背景颜色）：type-default、type-info、type-primary、type-success、type-warning、type-danger
+ */
+function showConfirm(message, fn, type, title) {
+	if (type) {
+		$("#global-confirm-modal").attr("class", "modal fade bootstrap-dialog " + type);
+	} else {
+		$("#global-confirm-modal").attr("class", "modal fade bootstrap-dialog type-primary");
+	}
+	
+	if (title) {
+		$("#global-confirm-title").html(title);
+	}
+
+	if (fn) {
+		$("#global-confirm-confirm").unbind("click");
+		$("#global-confirm-confirm").bind("click", function () {
+			$("#global-confirm-modal").modal("hide");
+		});
+		$("#global-confirm-confirm").bind("click", fn);
+	}
+	
+	$("#global-confirm-message").html(message);
+	$("#global-confirm-modal").modal();
+}
+</script>
+<script type="text/javascript" src="./注册_files/jquery.bootstrap.min.js.下载"></script>
+<script type="text/javascript" src="./注册_files/login.js.下载"></script>
+
+</body></html>

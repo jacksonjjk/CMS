@@ -1,0 +1,243 @@
+﻿/**
+ * 公共脚本
+ * 
+ * @author Gin
+ * @date 2015-08-28
+ */
+
+var CaretPos = 0; 
+/**
+ * 清除非数字和小数点
+ * @param obj
+ * @param Money_Scale 小数位控制
+ */
+function clearNoNum(obj,Money_Scale){
+	obj.value = obj.value.replace(/[^\d.-]/g,"");  //清除“数字”和“.”以外的字符
+	obj.value = obj.value.replace(/^\./g,"");  //验证第一个字符是数字而不是.
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的.
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+//	限制小数的显示位数	 
+	switch(Money_Scale)
+	{
+	case 1:
+		obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d).*$/,'$1$2.$3');//保留一位小数
+	  break;
+	case 2:
+		obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//保留俩位小数
+	  break;
+	case 3:
+		obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d).*$/,'$1$2.$3');//保留三位小数
+	  break;
+	case 4:
+		obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/,'$1$2.$3');//保留四位小数
+	  break;
+	}	
+	//2.设置光标位置	
+	CaretPos = CaretPos+1; 
+	 if(obj.setSelectionRange) {
+		 obj.focus(); 
+		 
+		 obj.setSelectionRange(CaretPos,CaretPos); 		
+	 } else if (obj.createTextRange) {
+	 	var range = obj.createTextRange(); 
+	 	range.collapse(true); 
+	 	range.moveEnd('character', CaretPos);
+	 	range.moveStart('character', CaretPos); 
+	 	range.select(); 
+	 } 
+}
+//获取光标位置
+function getCursortPosition (obj) {
+	// IE Support 
+	if (document.selection) { 
+		obj.focus (); 
+		var Sel = document.selection.createRange (); 
+		Sel.moveStart ('character', -obj.value.length); 
+		CaretPos = Sel.text.length; 
+	}
+	 // Firefox support 
+	 else if (obj.selectionStart || obj.selectionStart == '0') {
+	 	CaretPos = obj.selectionStart; 
+	 }
+}
+/**
+* formatMoney(s,n) 
+* 功能：金额按千位逗号分割 
+* 参数：s，需要格式化的金额数值. 
+* 参数：n,判断格式化后的金额是否需要小数位. 
+* 返回：返回格式化后的数值字符串. 
+*/ 
+function formatMoney(s, n) {
+	if(s==0){
+		return "0";
+	}
+	if(n==0){
+		s = (s + "").replace(/,/g, "");
+		var num = new Number(s);
+		var l=parseFloat(num).toFixed(n).split("").reverse();
+		t = "";
+		for ( var i = 0; i < l.length; i++) {
+			t += l[i] + ((i + 1) % 3 ==0 && (i + 1) != l.length && l[i + 1] != "-" ? "," : "");
+		}
+		return t.split("").reverse().join("");
+	}
+	else{
+		n = n > 0 && n <= 20 ? n : 2;
+		s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+		var l = s.split(".")[0].split("").reverse(), r = s.split(".")[1].split("").reverse();
+		t = "";
+		for ( var i = 0; i < l.length; i++) {
+			t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length && l[i + 1] != "-" ? "," : "");
+		}
+		var a ="";
+		for(var i =0 ;i< r.length; i++){
+			if(r[i]!="0"){
+				a = r[i] +a;
+			}else if(a!=""){
+				a=r[i]+a;
+			}
+		}
+		if(a!=""){
+			a="."+a;
+		}
+		return t.split("").reverse().join("") + a;
+	}
+} 
+
+/**
+ * 当前日期加时间(如:2009-06-12 12:00)
+ * 
+ * @returns {String}
+ */
+function CurentTime()
+  { 
+      var now = new Date();
+     
+      var year = now.getFullYear();       //年
+      var month = now.getMonth() + 1;     //月
+      var day = now.getDate();            //日
+     
+      var hh = now.getHours();            //时
+      var mm = now.getMinutes();          //分
+     
+      var clock = year + "-";
+     
+      if(month < 10)
+          clock += "0";
+     
+      clock += month + "-";
+     
+      if(day < 10)
+          clock += "0";
+         
+      clock += day + " ";
+     
+      if(hh < 10)
+          clock += "0";
+         
+      clock += hh + ":";
+      if (mm < 10) clock += '0'; 
+      clock += mm; 
+      return(clock); 
+  } 
+
+/**
+ * 加载图片
+ * @author Administrator
+ */
+function doDraw(imglist){	
+	//var imglist =document.getElementsByTagName("img");//	
+	var _width = window.innerWidth;//获取屏幕的宽度	
+    var _height = window.innerHeight - 20;//获取屏幕的高度
+	for( var i = 0, len = imglist.length; i < len; i++){
+		DrawImage(imglist[i],_width,_height);
+	}
+}
+
+/**
+ * 根据屏幕的宽度自动收缩图片
+ * @author Administrator
+ */
+function DrawImage(ImgD,_width,_height){ 
+	var image=new Image(); 
+	image.src=ImgD.src; 
+	image.onload = function(){   
+		if(image.width>30 && image.height>30){ //限制，只对宽高都大于30的图片做显示处理  
+	 
+			if(image.width/image.height>= _width/_height){ 
+				if(image.width>_width){
+					ImgD.width=_width; 
+					ImgD.height=(image.height*_width)/image.width; 
+				}else{ 
+					ImgD.width=image.width; 
+					ImgD.height=image.height; 
+				} 
+			}else{ 
+				if(image.height>_height){
+					ImgD.height=_height; 
+					ImgD.width=(image.width*_height)/image.height; 
+				}else{ 
+					ImgD.width=image.width; 
+					ImgD.height=image.height; 
+				} 
+			}
+		}	
+	};
+
+}
+
+/**
+ * 获取工程路径
+ * @returns
+ */
+function getRootPath() {
+    // 获取当前网址 如： http://localhost:8080/ems/Pages/Basic/Person.jsp
+    var curWwwPath = window.document.location.href;
+    // 获取主机地址之后的目录 如： /ems/Pages/Basic/Person.jsp
+    var pathName = window.document.location.pathname;
+    var pos = curWwwPath.indexOf(pathName);
+    // 获取主机地址 如： http://localhost:8080
+    var localhostPath = curWwwPath.substring(0, pos);
+    // 获取带"/"的项目名，如：/ems
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+    
+    return (localhostPath + projectName);
+}
+
+/**
+ * 导入导出的时间段限制器
+ * @returns {Boolean}
+ *  @ client/serverTime
+ * 应用模板
+ *		var permit = true;
+ * 		if ( permit ){
+ * 			限制执行的内容
+ * 		}else{
+ * 			$.messager.popup("导入导出功能暂时只能在10:30之前和17:30之后操作");
+ * 		}
+ */
+function timeLimiter(){
+	   
+	   var  permit = true;	   
+	
+	   return permit;
+}
+/**
+ * 导入导出的短时间内不可重复操作
+ * @param obj
+ * @param Quota 毫秒
+ */
+function exportLimiter(obj){
+		var Quota = 20000;
+	    var nowTime = new Date().getTime();
+	    var clickTime = Number($(obj).attr("ctime"));
+	    if( clickTime != 'undefined' && ((nowTime - clickTime )< Quota)){
+	        alert('操作过于频繁，稍后再试');
+	        $("#importModal").modal("hide");
+	        $("#exportModal").modal("hide");
+	        return false;
+	     }else{
+	        $(obj).attr("ctime",nowTime);
+	        return true;
+	     }
+}

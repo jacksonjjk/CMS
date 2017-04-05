@@ -1,0 +1,285 @@
+/**
+ * 显示隐藏导航栏
+ */
+$("#btnNavigation").on("click",function(){
+	if(window.top.document.getElementById("mainFrameset").cols != "190px,*")
+    {
+		window.top.document.getElementById("mainFrameset").cols = "190px,*";
+        $(this).html("<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span> 隐藏导航栏");
+    }
+    else
+    {
+		window.top.document.getElementById("mainFrameset").cols = "0,*";
+		$(this).html("<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span> 显示导航栏");
+    }
+});
+
+/**
+ * 打开切换店铺窗口
+ */
+$("#openChageShop").on("click",function(){
+	var html = "";
+	var jsonString = $("#setting-MultiEnterprise").html();
+	
+	if ($.trim(jsonString) == "") {
+		return;
+	}
+	
+	var jsonData = $.parseJSON(jsonString);
+	
+	$.each(jsonData, function(i, item) {
+		html += "<li><button onclick='changeShop(this)' class='btn btn-default btn-change' data='"+item.userName+"' name='"+item.enterpriseImageKID+"'  id='" + item.enterpriseKID + "'>" + item.enterpriseName + "</button></li>";
+		if(jsonData.length>i+1){
+			html+=" <li role='separator' class='divider' ></li>";
+		}
+	
+	});
+	
+	$("#setting-select-shop").html(html);
+	$("#setting-select-shop").val($("#setting-enterpriseKID").val());
+});
+
+/**
+ * 退出登录（注销）
+ */
+function logout() {
+	showConfirm("确定要注销重新登录吗？", function () {
+		$.ajax({
+			url: "../../transitionServlet?method=logout",
+			type: "post",
+			processData: false,
+			contentType: 'application/json',
+			data: {},
+			dataType : "text",
+			success : function(data, textStatus) {
+				top.location.href = getRootPath() + "/login.jsp"; 
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				showAlert("退出登录异常！", "type-warning");
+			}
+		});
+	})
+}
+
+/**
+ * 切铺店铺
+ */
+function changeShop(_this) {
+	var enterpriseKID = _this.id;
+	var enterpriseName = _this.textContent;
+	var enterpriseImagesKID=_this.name;	
+	var username=$(_this).attr("data");	
+//	$("#setting-shop-modal").modal("hide");
+	showProcessModal("正在加载配置信息...");
+	
+	$.ajax({
+		url: "../../UserServlet?method=getSysSettings&enterpriseKID=" + enterpriseKID,
+		type: "post",
+		dataType : "json",
+		success: function(data, textStatus) {
+			var error = data.error;
+			if (error) {
+				hideProcessModal();
+				showAlert(error, "type-warning");
+				return;
+			}
+
+			/*
+			 * 配置信息
+			 */
+			var i_Category_Show = "";
+			var i_Category_Title = "";
+			var i_Class_Show = "";
+			var i_Class_Title ="";
+			var i_Series_Show = "";
+			var i_Series_Title = "";
+			var i_Remark_Show = "";
+			var i_Remark_Title = "";
+//			三属性
+			var i_Num_Show = "";
+			var i_Num_Title = "";
+			var i_Location_Show = "";
+			var i_Location_Title = "";
+			var i_Brand_Show = "";
+			var i_Brand_Title = "";
+			
+			var i_PDA_Qty_Scale = "";
+			var i_PDA_Money_Scale = "";
+			
+			var i_PDA_Goods_Retail_Show="";
+			var i_PDA_Goods_Retail_Title=""; //零售价
+			
+			var i_PDA_Enable_Multi_Unit = ""; // 多单位
+			var i_PDA_Enable_2D_Table = ""; // 二维表
+			
+			var i_Dimension_One_Name = ""; // 维度 1Grou 名称
+			var i_Dimension_One_KID = ""; // 维度1Grou KID
+			var i_Dimension_Sec_Name = ""; // 维度 2Grou 名称
+			var i_Dimension_Sec_KID = ""; //维度2Grou  KID
+			var i_PDA_Storage = "0"; // 是否开启多仓，1为开启，否则为不开启
+
+			if (data.SysSettings.length > 0) {
+				// 解析数组
+				$.each(data.SysSettings, function(i, item) {
+					if (item.ItemName == "PDA_Goods_Category_Show") {
+						i_Category_Show = item.Value;
+					} else if (item.ItemName == "PDA_Goods_Category_Title") {
+						i_Category_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Class_Show") {
+						i_Class_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Class_Title") {
+						i_Class_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Series_Show") {
+						i_Series_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Series_Title") {
+						i_Series_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Remark_Show") {
+						i_Remark_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Remark_Title") {
+						i_Remark_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Num_Show") {
+						i_Num_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Num_Title") {
+						i_Num_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Location_Show") {
+						i_Location_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Location_Title") {
+						i_Location_Title = item.Value
+					} else if (item.ItemName == "PDA_Goods_Brand_Show") {
+						i_Brand_Show = item.Value
+					} else if (item.ItemName == "PDA_Goods_Brand_Title") {
+						i_Brand_Title = item.Value
+					} else if (item.ItemName == "PDA_Qty_Scale") {
+						i_PDA_Qty_Scale = item.Value
+					} else if (item.ItemName == "PDA_Money_Scale") {
+						i_PDA_Money_Scale = item.Value
+					} else if (item.ItemName == "PDA_Enable_Multi_Unit") {
+						i_PDA_Enable_Multi_Unit = item.Value;
+					} else if (item.ItemName == "PDA_Enable_2D_Table") {
+						i_PDA_Enable_2D_Table = item.Value;
+					} else if (item.ItemName == "PDA_Storage") {
+						i_PDA_Storage = item.Value;
+					}else if (item.ItemName == "PDA_Goods_Retail_Title"){
+						i_PDA_Goods_Retail_Title=item.Value;
+					}else if (item.ItemName == "PDA_Goods_Retail_Show"){
+						i_PDA_Goods_Retail_Show=item.Value;
+					}
+				});
+				
+				if (data.Dimension.length > 0) {
+					i_Dimension_One_Name = data.Dimension[0].DimenName;
+					i_Dimension_One_KID = data.Dimension[0].KID;
+					i_Dimension_Sec_Name = data.Dimension[1].DimenName;
+					i_Dimension_Sec_KID = data.Dimension[1].KID;
+				}
+			
+			}
+			
+			/*
+			 * 配置信息为空时设置默认值
+			 */
+			if (i_Category_Show == "") {
+				i_Category_Show = "1";
+			}
+			
+			if (i_Category_Title == "") {
+				i_Category_Title = "类别";
+			}
+			
+			if (i_Class_Show == "") {
+				i_Class_Show = "1";
+			}
+			
+			if (i_Class_Title == "") {
+				i_Class_Title = "单位";
+			}
+			
+			if (i_Series_Show == "") {
+				i_Series_Show = "1";
+			}
+
+			if (i_Series_Title == "") {
+				i_Series_Title = "规格";
+			}
+			
+			if (i_Remark_Show == "") {
+				i_Remark_Show = "1";
+			}
+			
+			if (i_Remark_Title == "") {
+				i_Remark_Title = "备注";
+			}
+			
+			if (i_Num_Show == "") {
+				i_Num_Show = "1";
+			}
+			
+			if (i_Num_Title == "") {
+				i_Num_Title = "货号";
+			}
+			
+			if (i_Location_Show == "") {
+				i_Location_Show = "1";
+			}
+			
+			if (i_Location_Title == "") {
+				i_Location_Title = "货位";
+			}
+			
+			if (i_Brand_Show == "") {
+				i_Brand_Show = "1";
+			}
+			
+			if (i_Brand_Title == "") {
+				i_Brand_Title = "品牌";
+			}
+			
+			
+			if (i_PDA_Qty_Scale == "") {
+				i_PDA_Qty_Scale = "2";
+			}
+			
+			if (i_PDA_Money_Scale == "") {
+				i_PDA_Money_Scale = "2";
+			}
+			
+			if(i_PDA_Enable_Multi_Unit==""){
+				i_PDA_Enable_Multi_Unit="0";
+			}
+			
+			var propert = [i_Category_Show,i_Category_Title,i_Class_Show,i_Class_Title,i_Series_Show,i_Series_Title,
+			i_Remark_Show,i_Remark_Title,i_Num_Show,i_Num_Title,i_Location_Show,i_Location_Title
+			,i_Brand_Show,i_Brand_Title];
+			var dimension = [i_Dimension_One_Name,i_Dimension_One_KID,i_Dimension_Sec_Name,i_Dimension_Sec_KID]
+			var url = "../../transitionServlet?method=changeShop&enterpriseKID=" + enterpriseKID + 
+				"&username=" + encodeURI(encodeURI(username)) +
+				"&enterpriseName=" + encodeURI(encodeURI(enterpriseName)) +
+				"&enterpriseImagesKID=" + enterpriseImagesKID +				
+				"&Enable_Multi_Unit=" + i_PDA_Enable_Multi_Unit + 
+				"&Enable_2D_Table=" + i_PDA_Enable_2D_Table + 
+				"&propert=" + encodeURI(encodeURI(propert)) + 
+				"&dimension=" + dimension +
+				"&Qty_Scale=" + i_PDA_Qty_Scale + 
+				"&Money_Scale=" + i_PDA_Money_Scale + 
+				"&PDA_Storage=" + i_PDA_Storage;
+			
+			$.ajax({
+				url: url,
+				type: "post",
+				dataType: "text",
+				success: function(data, textStatus) {
+					hideProcessModal();
+					top.location.href = getRootPath() + "/biz/pages/index.jsp"; 
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					hideProcessModal();
+					showAlert("网络异常", "type-warning");
+				}
+			});
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			hideProcessModal();
+			showAlert("网络异常", "type-warning");
+		}
+	});
+}
