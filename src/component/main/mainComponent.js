@@ -4,23 +4,25 @@ var stype = require('./mainComponent.css');
 var MainComponent = React.createClass({
 	componentWillMount: function() {
 		//判断是当前用户是否有权限，如果没有，则跳车到 login
+		console.log(1)
 	},
 	render: function(){
 		return (
-			<div className="dk-container">
-				<div className="dk-header"></div>
-				<div className="dk-body">
-					<div className="dk-menu">
-						<ul className="list-group">
-							<li className="list-group-item"><a href="#homework" title="">homework</a></li>
-							<li className="list-group-item"><a href="#page1" title="">page1</a></li>
-							<li className="list-group-item"><a href="#page2" title="">page2</a></li>
-							<li className="list-group-item"><a href="#page3" title="">page3</a></li>
-						</ul>
-					</div>
-					<div className="dk-content" data-ui-view=""></div>
+			<div className="container">
+				<div className="header"></div>
+				<div className="body clear">
+					<ul className="menu">
+						<li className="menu-item"><a href="#summarizing" title="">销售汇总</a></li>
+						<li className="menu-item"><a href="#inventory" title="">存货列表</a></li>
+						<li className="menu-item"><a href="#order" title="">订单列表</a></li>
+						<li className="menu-item"><a href="#client" title="">客户列表</a></li>
+						<li className="menu-item"><a href="#market" title="">销售流水</a></li>
+						<li className="menu-item"><a href="#storage" title="">入库流失</a></li>
+						<li className="menu-item"><a href="#Ranking" title="">各类排行</a></li>
+						<li className="menu-item"><a href="#store" title="">兄弟店铺</a></li>
+					</ul>
+					<div id="content"></div>
 				</div>
-				<div className="dk-footer">@dk</div>
 			</div>
 		)
 	}
