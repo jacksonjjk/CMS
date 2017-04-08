@@ -1,27 +1,36 @@
 var React = require('react');
 var stype = require('./mainComponent.css');
 
+var ReactRouter = require("react-router");
+var {Router, Route, hashHistory, Link, IndexRoute, browserHistory} = ReactRouter;
+
 var MainComponent = React.createClass({
 	componentWillMount: function() {
 		//判断是当前用户是否有权限，如果没有，则跳车到 login
-		console.log(1)
+		console.log(2)
 	},
+	componentDidMount() {
+		console.log(this.props.router)
+		console.log(this.props.route)
+		console.log(this.props)
+	},
+	
 	render: function(){
 		return (
 			<div className="container">
 				<div className="header"></div>
 				<div className="body clear">
 					<ul className="menu">
-						<li className="menu-item"><a href="#summarizing" title="">销售汇总</a></li>
-						<li className="menu-item"><a href="#inventory" title="">存货列表</a></li>
-						<li className="menu-item"><a href="#order" title="">订单列表</a></li>
-						<li className="menu-item"><a href="#client" title="">客户列表</a></li>
-						<li className="menu-item"><a href="#market" title="">销售流水</a></li>
-						<li className="menu-item"><a href="#storage" title="">入库流失</a></li>
-						<li className="menu-item"><a href="#Ranking" title="">各类排行</a></li>
-						<li className="menu-item"><a href="#store" title="">兄弟店铺</a></li>
+						<li className="menu-item"><Link to="/summarizing">销售汇总</Link></li>
+						<li className="menu-item"><Link to="/inventory">存货列表</Link></li>
+						<li className="menu-item"><Link to="/order">订单列表</Link></li>
+						<li className="menu-item"><Link to="/client">客户列表</Link></li>
+						<li className="menu-item"><Link to="/market">销售流水</Link></li>
+						<li className="menu-item"><Link to="/storage">入库流失</Link></li>
+						<li className="menu-item"><Link to="/Ranking">各类排行</Link></li>
+						<li className="menu-item"><Link to="/store">兄弟店铺</Link></li>
 					</ul>
-					<div id="content"></div>
+					<div>{this.props.children}</div>
 				</div>
 			</div>
 		)

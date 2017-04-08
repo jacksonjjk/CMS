@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --progress --colors",
-    "start": "webpack-dev-server --devtool eval --progress --port 3001 --colors --content-base ./"
+    "start": "webpack-dev-server --devtool eval --progress --port 3000 --colors --content-base ./"
   },
   "author": "dk.lan",
   "license": "ISC",
