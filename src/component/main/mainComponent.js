@@ -30,7 +30,7 @@ var MainComponent = React.createClass({
 						<li className="menu-item"><Link to="/Ranking">各类排行</Link></li>
 						<li className="menu-item"><Link to="/store">兄弟店铺</Link></li>
 					</ul>
-					<div>{this.props.children}</div>
+					<div id="content">{this.props.children}</div>
 				</div>
 			</div>
 		)
