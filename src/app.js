@@ -1,6 +1,13 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var redux = require('redux')
+var {Provider}  = require('react-redux');
+var Reducer = require('./reducers/reducer.js');
+var Component = require('./containers/container.js');
+var store = redux.createStore(Reducer);
+
+
 var loginComponent =require('./component/login/loginComponent.js');
 var mainComponent = require('./component/main/mainComponent.js');
 var summarizingComponent = require('./component/summarizing/summarizingComponent.js');
@@ -14,10 +21,15 @@ var clientComponent = require('./component/client/clientComponent.js');
 
 var ReactRouter = require("react-router");
 var {Router, Route, hashHistory, Link, IndexRoute, browserHistory} = ReactRouter;
-
 ReactDOM.render(
 	(<Router history={hashHistory}>
-		<Route path="/" component={mainComponent}>
+		<Route path="/" component={mainComponent}/>
+	</Router>)
+	, document.getElementById('main')
+);
+ReactDOM.render(
+	( <Provider store = {store}>
+		<Router history={hashHistory}>
 			<Route path="/summarizing" component={summarizingComponent}/>
 			<Route path="/inventory" component={inventoryComponent}/>
 			<Route path="/order" component={orderComponent}/>
@@ -26,7 +38,9 @@ ReactDOM.render(
 			<Route path="/storage" component={storageComponent}/>
 			<Route path="/ranking" component={rankingComponent}/>
 			<Route path="/store" component={storeComponent}/>
-		</Route>
-	</Router>)
-	, document.getElementById('main')
+			<Route path="/Component" component={Component}/>
+		</Router>
+	</Provider>
+	)
+	, document.getElementById('content')
 );
