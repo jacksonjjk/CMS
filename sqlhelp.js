@@ -1,6 +1,19 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.config.js');
+  
+   var server2 = new WebpackDevServer(webpack(config), {
+     stats: config.devServer.stats,
+     hot: true,
+     publicPath: config.output.publicPath
+   });
+   server2.listen(3000, 'localhost', function(err, result) {
+     if (err) {
+       return console.log(err);
+     }
+     return console.log('listening at locahost:3000...');
+   })
+
 
 var server = new WebpackDevServer(webpack(config), {
   stats: config.devServer.stats,
@@ -24,10 +37,12 @@ var app = express();
 //调用mysql模块
 var mysql = require('mysql');
 //连接mysql所需的用户名和密码
+var message = require('./model/message.model.js');
 
 var server = mysql.createConnection({
   user:'root',
   password:''
+  multipleStatements:true //启动多条语句执行
 
 });
 //加载 body-parser 中间件（第三方模块）
@@ -102,10 +117,10 @@ app.get('/index/index', urlencodedParser, function(request, response){
   //   })
 
   // 插入空数据
-  if(request.query){ 
+  if(request.query){
    console.log(request.query.type);
    console.log(request.query);
-  if(request.query.type=="addItem"){ 
+  if(request.query.type=="addItem"){
   server.query("INSERT INTO indexgoods (img,price,introduction) VALUES('','','')", function (err, data){
               // if(err){
               //   console.log('{err: 1, msg: "数据库出错"}');
@@ -198,6 +213,13 @@ app.get('/index', urlencodedParser, function(request, response){
   })
 });
 
+app.get("/search",function(request,response){
+var sql = "SELECT SQL_CALC_FOUND_ROWS * from okbuy_goods where concat(uid,uname,uprice,discount,oprice) like '%"+(request.query.value ? request.query.value :'')+"%' limit "+((request.query.pagenum-1)*5 ? (request.query.pagenum-1)*5 : 0)+",5; SELECT FOUND_ROWS();"
+    console.log(sql)
+  server.query(sql,function(err,result){
+    response.send(result)
+  });
+})
 
 app.use(express.static(path.join(__dirname + '/')));
 // app.use(express.static(path.join(__dirname+ '/app')));
