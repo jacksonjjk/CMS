@@ -14,20 +14,6 @@ var config = require('./webpack.config.js');
      return console.log('listening at locahost:3000...');
    })
 
-
-var server = new WebpackDevServer(webpack(config), {
-  stats: config.devServer.stats,
-  hot: true,
-  publicPath: config.output.publicPath,
-
-});
-
-server.listen(3000, 'localhost', function(err, result) {
-  if (err) {
-    return console.log(err);
-  }
-  return console.log('listening at localhost:3000...');
-})
 //加载 express 模块（第三方模块）
 var express = require('express');
 //原生模块
@@ -41,7 +27,7 @@ var message = require('./model/message.model.js');
 
 var server = mysql.createConnection({
   user:'root',
-  password:''
+  password:'',
   multipleStatements:true //启动多条语句执行
 
 });
